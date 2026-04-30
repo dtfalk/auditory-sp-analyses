@@ -1,0 +1,10 @@
+Event,Timestamp_ns,ms_since_last,s_since_last
+screen_presented,351200092248400,0,0.0
+page_navigation:study_info_next,351216963027700,16870.779,16.870779
+page_navigation:incentives_next,351243537916900,26574.889,26.574889
+page_navigation:risks_benefits_next,351437541241400,194003.324,194.003324
+page_navigation:confidentiality_next,351448508017600,10966.776,10.966776
+page_navigation:contacts_next,351459740836000,11232.818,11.232818
+consent_choice:consented=True_next,351467734874000,7994.038,7.994038
+email_consent:email_consent=True_next,351473246626300,5511.752,5.511752
+signature:signed,351478436937000,5190.311,5.190311

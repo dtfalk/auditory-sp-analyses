@@ -1,0 +1,5 @@
+subject_number,block_index,block_scheme,pre_or_post,time,response,response_text
+02242025001,1,full_sentence,pre,2026-02-24 16:27:35,3,3 - Awake; but relaxed; responsive but not fully alert
+02242025001,1,full_sentence,post,2026-02-24 16:48:54,3,3 - Awake; but relaxed; responsive but not fully alert
+02242025001,2,imagined_sentence,pre,2026-02-24 16:55:53,3,3 - Awake; but relaxed; responsive but not fully alert
+02242025001,2,imagined_sentence,post,2026-02-24 17:11:31,3,3 - Awake; but relaxed; responsive but not fully alert

@@ -1,0 +1,5 @@
+subject_number,block_index,block_scheme,pre_or_post,time,response,response_text
+04042026002,1,imagined_sentence,pre,2026-04-04 13:09:34,3,3 - Awake; but relaxed; responsive but not fully alert
+04042026002,1,imagined_sentence,post,2026-04-04 13:29:06,4,4 - Somewhat foggy; let down
+04042026002,2,full_sentence,pre,2026-04-04 13:33:42,3,3 - Awake; but relaxed; responsive but not fully alert
+04042026002,2,full_sentence,post,2026-04-04 13:50:10,5,5 - Foggy; losing interest in remaining awake; slowed down

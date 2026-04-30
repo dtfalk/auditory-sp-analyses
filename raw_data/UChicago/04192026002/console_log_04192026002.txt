@@ -1,0 +1,176 @@
+===========================================================================
+INITIAL SYSTEM STATE
+===========================================================================
+
+Name      Status StartType
+----      ------ ---------
+SysMain  Stopped  Disabled
+WSearch  Stopped  Disabled
+wuauserv Stopped    Manual
+
+
+Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+EXPERIMENT MODE ACTIVATION
+===========================================================================
+
+Entering experiment mode...
+Project root detected as:
+  C:\Users\Apex\Desktop\auditory-superstitious-perception
+SysMain stopped and disabled.
+WSearch stopped and disabled.
+wuauserv stopped and disabled.
+Experiment mode enabled.
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+STATE AFTER ENTERING EXPERIMENT MODE
+===========================================================================
+
+Name      Status StartType
+----      ------ ---------
+SysMain  Stopped  Disabled
+WSearch  Stopped  Disabled
+wuauserv Stopped  Disabled
+
+
+Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+EXPERIMENT LOGS
+===========================================================================
+
+pygame 2.6.1 (SDL 2.28.4, Python 3.11.9)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Using output: 23 Phones 1-2 (MOTU MicroBook)
+Device native sample rate: 88200 Hz
+  Rate 88200 Hz failed on 'Phones 1-2 (MOTU MicroBook)': Error opening OutputStream: Invalid sample rate [PaErrorCode -9997] — trying next...
+  Rate 44100 Hz failed on 'Phones 1-2 (MOTU MicroBook)': Error opening OutputStream: Invalid sample rate [PaErrorCode -9997] — trying next...
+  Rate 48000 Hz failed on 'Phones 1-2 (MOTU MicroBook)': Error opening OutputStream: Invalid sample rate [PaErrorCode -9997] — trying next...
+Sample rate 88200 Hz rejected; using 96000 Hz instead
+Audio device: Phones 1-2 (MOTU MicroBook)
+Host API: Windows WASAPI
+Sample rate: 96000
+Exclusive mode: True
+Audio callback diagnostics:
+  Runtime (s): 7259.34
+  output_underflow: 0
+  output_overflow: 0
+  input_underflow: 0
+  input_overflow: 0
+  priming_output: 0
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+SYSTEM RESOURCE USAGE DURING EXPERIMENT
+===========================================================================
+
+  Monitoring Duration:  121 min 02 sec  (726 samples @ 10s interval)
+
+  CPU Usage:
+    Min:     0.0%
+    Max:    10.6%
+    Avg:     6.1%
+
+  RAM Usage:  (Total: 15.75 GB)
+    Min:     3.02 GB  ( 19.2%)
+    Max:     3.23 GB  ( 20.5%)
+    Avg:     3.14 GB  ( 19.9%)
+
+  Disk Activity (I/O Busy %):
+    Min:     0.0%
+    Max:     0.4%
+    Avg:     0.0%
+
+  Disk Read Throughput:
+    Min:         0 B/s
+    Max:      439 KB/s
+    Avg:        1 KB/s
+
+  Disk Write Throughput:
+    Min:         0 B/s
+    Max:      440 KB/s
+    Avg:       13 KB/s
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+EXPERIMENT MODE DEACTIVATION
+===========================================================================
+
+Restoring normal system state...
+WSearch restored to Disabled.
+SysMain restored to Disabled.
+wuauserv restored to Manual.
+System restored.
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+FINAL SYSTEM STATE AFTER RESTORE
+===========================================================================
+
+Name      Status StartType
+----      ------ ---------
+SysMain  Stopped  Disabled
+WSearch  Stopped  Disabled
+wuauserv Running    Manual
+
+
+Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+SUBJECT SUMMARY STATISTICS
+===========================================================================
+
+  Subject: 04192026002
+
+    Block 1: imagined_sentence
+    Block 1 D-Prime: 0.25666319415648875
+    Block 2: full_sentence
+    Block 2 D-Prime: -0.15572842876462373
+
+===========================================================================
+===========================================================================
+
+===========================================================================
+CREATING DEIDENTIFIED DATA FOLDER
+===========================================================================
+
+Created deidentified data folder.
+
+===========================================================================
+===========================================================================
+
+---------------------------------------------------------------------------
+Subject 04192026002 results stored in:
+  C:\Users\Apex\Desktop\auditory-superstitious-perception\results\04192026002
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+Deidentified results folder:
+  C:\Users\Apex\Desktop\auditory-superstitious-perception\results_deidentified
+---------------------------------------------------------------------------

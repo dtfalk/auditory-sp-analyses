@@ -1,0 +1,5 @@
+**/results
+**/__pycache__
+**/venv
+**/old-code
+.last_audio_device

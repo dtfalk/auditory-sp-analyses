@@ -1,0 +1,4 @@
+Event,Timestamp_ns,ms_since_last,s_since_last
+screen_presented,123612434425800,0,0.0
+text_submitted:methodology_explanation,123754083076900,141648.651,141.648651
+text_submitted:methodology_changes,123787672381400,33589.304,33.589304

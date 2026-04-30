@@ -1,0 +1,8 @@
+Event,Timestamp_ns,ms_since_last,s_since_last
+screen_presented,468704521438800,0,0.0
+button_click:play_sentence,468719796292000,15274.853,15.274853
+button_click:play_sentence,468722587081400,2790.789,2.790789
+button_click:play_sentence,468725674899800,3087.818,3.087818
+button_click:play_sentence,468728144472600,2469.573,2.469573
+button_click:play_sentence,468730666963100,2522.490,2.522490
+button_click:continue,468733552885300,2885.922,2.885922

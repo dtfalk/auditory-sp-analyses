@@ -1,0 +1,5 @@
+subject_number,block_index,block_scheme,pre_or_post,time,response,response_text
+04042026003,1,full_sentence,pre,2026-04-04 15:15:00,3,3 - Awake; but relaxed; responsive but not fully alert
+04042026003,1,full_sentence,post,2026-04-04 15:36:39,3,3 - Awake; but relaxed; responsive but not fully alert
+04042026003,2,imagined_sentence,pre,2026-04-04 15:44:47,3,3 - Awake; but relaxed; responsive but not fully alert
+04042026003,2,imagined_sentence,post,2026-04-04 16:04:32,3,3 - Awake; but relaxed; responsive but not fully alert
