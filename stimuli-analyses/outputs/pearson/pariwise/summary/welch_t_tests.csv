@@ -1,0 +1,4 @@
+condition_a,condition_b,mean_diff_a_minus_b,t_stat,p_value
+target-target,distractor-distractor,0.005779740815355971,23.38380154475122,1.7001802367381997e-119
+target-target,target-distractor,0.005532140550532274,26.048470908911415,2.232856986862426e-147
+distractor-distractor,target-distractor,-0.00024760026482369753,-1.1551222012147278,0.2480529121621432

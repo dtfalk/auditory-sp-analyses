@@ -1,0 +1,4 @@
+condition_a,condition_b,mean_diff_a_minus_b,cohens_d,hedges_g
+target-target,distractor-distractor,0.005779740815355971,0.31282852610399103,0.312818027445532
+target-target,target-distractor,0.005532140550532274,0.3013972200145958,0.3013905069330978
+distractor-distractor,target-distractor,-0.00024760026482369753,-0.013427524639264853,-0.013427225565281307
