@@ -1,0 +1,50 @@
+\contentsline {section}{\numberline {1}What this book is and how to read it}{1}{section.1}%
+\contentsline {paragraph}{Reading guide.}{2}{section*.2}%
+\contentsline {paragraph}{Reminder structure.}{2}{section*.3}%
+\contentsline {paragraph}{A useful hierarchical framing.}{2}{section*.4}%
+\contentsline {section}{\numberline {2}Chapter 22 -- Per-subject classification image}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Plain-English intent}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Method}{2}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Result}{2}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}How to interpret}{3}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Chapter 23 -- Within-subject split-half consistency}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Plain-English intent}{6}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Method}{6}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Result}{6}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}How to interpret}{6}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Chapter 24 -- Per-subject spectral logistic regression}{8}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Plain-English intent}{8}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Method}{8}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Result}{8}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}How to interpret}{8}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Chapter 25 -- Reminder-anchored and block-position effects}{11}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Plain-English intent}{11}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Method}{11}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Result}{11}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}How to interpret}{11}{subsection.5.4}%
+\contentsline {section}{\numberline {6}Synthesis}{14}{section.6}%
+\contentsline {paragraph}{Where the signal lives.}{14}{section*.17}%
+\contentsline {paragraph}{Where the signal does not live.}{14}{section*.18}%
+\contentsline {paragraph}{Implicit hierarchical model.}{14}{section*.19}%
+\contentsline {section}{\numberline {7}Chapter 26 -- Block-order and site effects}{15}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Plain-English intent}{15}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Method}{15}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Result}{15}{subsection.7.3}%
+\contentsline {paragraph}{Block order.}{15}{section*.20}%
+\contentsline {paragraph}{Site.}{15}{section*.21}%
+\contentsline {section}{\numberline {8}Chapter 27 -- $d'$ tertiles: who carries the signal}{17}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Plain-English intent}{17}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Result -- signed $d'$}{17}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Result -- absolute $|d'|$}{17}{subsection.8.3}%
+\contentsline {section}{\numberline {9}Chapter 28 -- Individually-significant subjects}{19}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Plain-English intent}{19}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Result}{19}{subsection.9.2}%
+\contentsline {paragraph}{Questionnaire profile of the significant subjects.}{19}{section*.26}%
+\contentsline {section}{\numberline {10}Chapter 29 -- Questionnaire correlates}{21}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Plain-English intent}{21}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}Method}{21}{subsection.10.2}%
+\contentsline {subsection}{\numberline {10.3}Result}{21}{subsection.10.3}%
+\contentsline {paragraph}{BAIS\_V median split.}{21}{section*.29}%
+\contentsline {paragraph}{How to interpret.}{21}{section*.30}%
+\contentsline {section}{\numberline {11}Synthesis (revised)}{24}{section.11}%
+\contentsline {paragraph}{One-sentence summary.}{24}{section*.35}%
