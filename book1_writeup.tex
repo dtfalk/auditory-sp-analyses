@@ -1,0 +1,988 @@
+% =====================================================================
+%  Book 1.  Stimulus-Only Analyses --- Detailed Writeup
+%  Auditory Superstitious Perception project
+% =====================================================================
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{float}
+
+% ---------- listings setup ----------
+\definecolor{codebg}{rgb}{0.96,0.96,0.96}
+\definecolor{codekw}{rgb}{0.10,0.30,0.70}
+\definecolor{codestr}{rgb}{0.55,0.10,0.10}
+\definecolor{codecom}{rgb}{0.30,0.50,0.30}
+
+\lstset{
+  language        = Python,
+  basicstyle      = \ttfamily\footnotesize,
+  backgroundcolor = \color{codebg},
+  keywordstyle    = \color{codekw}\bfseries,
+  stringstyle     = \color{codestr},
+  commentstyle    = \color{codecom}\itshape,
+  numbers         = left,
+  numberstyle     = \tiny\color{gray},
+  numbersep       = 6pt,
+  frame           = single,
+  framerule       = 0pt,
+  breaklines      = true,
+  showstringspaces= false,
+  columns         = fullflexible,
+  tabsize         = 2,
+  xleftmargin     = 14pt,
+}
+
+\graphicspath{{./}}
+
+% Cap any included figure so it never exceeds the page height.
+\newcommand{\figfit}[1]{\includegraphics[width=\linewidth,height=0.75\textheight,keepaspectratio]{#1}}
+% Pedagogical convenience boxes
+\newcommand{\pintent}[1]{\par\medskip\noindent\textit{Plain-English intent:} #1\par\smallskip}
+\newcommand{\pkey}[1]{\par\medskip\noindent\textit{Reader takeaway:} #1\par\smallskip}
+
+\title{\textbf{Book 1.  Stimulus-Only Analyses}\\
+       \large What was actually in the auditory superstitious-perception stimulus set?}
+\author{Project notebook}
+\date{April 2026}
+
+% =====================================================================
+\begin{document}
+\maketitle
+\tableofcontents
+\bigskip
+
+% =====================================================================
+\section*{Executive summary}
+\addcontentsline{toc}{section}{Executive summary}
+
+The stimulus set contains \textbf{300 white-noise clips}, each $L = 2960$
+samples long at $8\,\mathrm{kHz}$ ($0.37\,\mathrm{s}$), divided by design into
+$150$ \emph{targets} (highly correlated with a fixed template clip
+\texttt{wall.wav}) and $150$ \emph{distractors} (uncorrelated with it).  Book~1
+asks: \emph{independent of any subject behaviour, what structure does this
+set actually contain?}
+
+The short answer:
+
+\begin{itemize}
+\item The target/distractor split \emph{is} statistically real under Pearson
+      ($d = 0.31$, label-permutation $p < 10^{-3}$), but the effect size is
+      tiny: targets are pairwise more similar than distractors by
+      $\Delta\bar r \approx 5.8\times 10^{-3}$.
+\item That entire effect is the projection onto the template \texttt{wall.wav}.
+      After residualising against the template, target--target cohesion
+      \emph{vanishes} ($\bar r_{tt} = 3.5\times 10^{-5}$, $p \approx 0.84$).
+      The targets do not form an internal family beyond their shared
+      wall-component.
+\item Under non-Pearson metrics (lagged cross-correlation, envelope
+      correlation, log-spectrum correlation, MFCC cosine) the
+      target/distractor distinction \emph{collapses} ($d \le 0.04$ for all
+      four).  The label is a Pearson-specific artefact of selection.
+\item The set has no clean intrinsic clusters: best silhouette across all
+      metrics and clustering methods is $0.15$ (envelope, agglomerative),
+      and that split isolates $6$ acoustic outliers from the other $294$.
+\item Behaviourally, $26$ subjects classified at chance (mean accuracy
+      $0.510$, hit rate $0.480$, false-alarm rate $0.460$).  No metric
+      predicts trial responses meaningfully (best AUC $= 0.510$).
+      Label-blind clusters fit subjects' choices fractionally
+      \emph{better} than the experimenter labels do
+      ($0.530$ vs.\ $0.510$).
+\end{itemize}
+
+The detailed development follows.
+
+% =====================================================================
+\section*{How to read this book}
+\addcontentsline{toc}{section}{How to read this book}
+
+The four parts walk a single arc:
+
+\begin{itemize}
+\item \textbf{Part I (Foundations).} What is on disk: $300$ short white-noise
+      clips, half labelled \emph{target} (high Pearson correlation with a
+      single fixed template clip \texttt{wall.wav}), half labelled
+      \emph{distractor} (near-zero correlation). Everything else in the book
+      is built on these centred waveforms.
+
+\item \textbf{Part II (Pearson).} We compare the targets against the
+      distractors using the same metric the experimenter used to build the
+      set in the first place (Pearson correlation between centred
+      waveforms). This is the metric most ``flattering'' to the design,
+      and even here the effect is small.
+
+\item \textbf{Part III (other acoustic metrics).} Four other reasonable
+      perceptual / acoustic similarity measures (lagged cross-correlation,
+      envelope correlation, log-spectrum correlation, MFCC cosine). Under
+      these, the target / distractor distinction collapses --- the label is a
+      Pearson-specific selection artefact.
+
+\item \textbf{Part IV (synthesis + behavioural sanity check).} A one-pass
+      check against subject responses (full Book~2 follow-up is in
+      \texttt{book2\_writeup.pdf}) showing that subjects performed at chance
+      and that no acoustic metric meaningfully predicts their responses.
+\end{itemize}
+
+Each chapter starts with a one-paragraph \emph{Plain-English intent} box, then
+gives the formula and the table or plot, and ends with a one-paragraph
+\emph{Reader takeaway} box. Skim only the boxes for the narrative; read the
+body for derivations and exact numbers.
+
+% =====================================================================
+\section{Foundations (Part I)}
+
+\subsection{Stimulus inventory}
+\label{sec:inventory}
+
+The stimulus set is organised on disk as
+\begin{center}
+\ttfamily
+raw\_data/audio\_stimuli/\{full\_sentence,imagined\_sentence\}/\{targets,distractors\}/
+\end{center}
+giving $4$ folders of $75$ \texttt{.wav} files each, for $300$ total.  The
+folder split corresponds to the two \emph{blocks} of the experiment:
+each subject heard the same target clip in each block but with different
+target-defining instructions (literal target vs.\ imagined target).
+
+The selection rule for targets and distractors was Pearson correlation
+with a single fixed template, \texttt{raw\_data/audio\_stimuli/wall.wav}.
+Concretely, the original pipeline drew $\sim 2{,}000{,}000$ candidate
+white-noise clips, computed each candidate's Pearson $r$ to
+\texttt{wall.wav}, and selected the top tail as targets and a band near
+$r = 0$ as distractors.
+
+\subsection{Preprocessing}
+
+The on-disk files are PCM\_16, $8\,\mathrm{kHz}$, RMS-normalised to
+$-23\,\mathrm{dBFS}$ as the final step of the pipeline.  All Book~1
+analyses load these on-disk samples directly as \texttt{float64} and
+\emph{centre} them (subtract the mean) but do \emph{not} z-score:
+
+\begin{lstlisting}[caption={Canonical loader (excerpt from \texttt{ch11-non-pearson-metrics.py})}]
+sr, raw = wavfile.read(wav_path)
+rows.append(raw.astype(np.float64))
+...
+waveform_matrix = np.vstack(rows)
+waveform_matrix = waveform_matrix - waveform_matrix.mean(axis = 1, keepdims = True)
+\end{lstlisting}
+
+This matters because Pearson correlation is defined on centred signals
+but is invariant to scale, and because the energy-based metrics in
+Part~III \emph{depend} on absolute amplitude.  Z-scoring would erase
+those amplitude differences.
+
+\subsection{Descriptive properties}
+
+Every clip has the same length ($L = 2960$ samples), the same sample
+rate ($8000\,\mathrm{Hz}$) and the same nominal RMS.  Mean off-diagonal
+Pearson similarity across all $300 \times 300$ pairs is
+$+1.40 \times 10^{-3}$ with std $1.86 \times 10^{-2}$:  the clips look
+like nearly orthogonal noise vectors in $\mathbb R^{2960}$.
+
+% =====================================================================
+\section{Pearson-centered analyses (Part II)}
+
+\subsection{Chapter 4: Template-correlation distribution}
+\pintent{Targets were selected by sorting candidate clips on Pearson correlation
+with one fixed template, \texttt{wall.wav}. We start by simply looking at the
+distribution of those template correlations, both to confirm the selection rule
+and to set the scale (in $\mathbb R^{2960}$, what \emph{counts} as a large
+correlation?).}
+
+For a centred clip $s \in \mathbb R^L$ and centred template
+$t \in \mathbb R^L$, Pearson $r$ is
+\begin{equation}
+  r(s, t)
+  \;=\;
+  \frac{\langle s, t \rangle}{\|s\|\,\|t\|}
+  \;=\;
+  \cos \theta_{st}.
+\end{equation}
+Selected targets sit in the top tail of $r(\cdot, t_{\text{wall}})$ over
+the candidate pool; selected distractors sit near $0$.  In the final set
+we have $r(s, t_{\text{wall}}) \in [0.070,\, 0.094]$ for targets and
+$|r| \lesssim 10^{-2}$ for distractors (these are the values stored in
+\texttt{ch9\_pearson\_r\_to\_template.csv}).
+
+The numerical smallness of even the targets ($r \approx 0.08$, not
+$0.5$) is a consequence of the high dimension: a uniformly random unit
+vector in $\mathbb R^{2960}$ has $r$ to a fixed unit vector with std
+$1/\sqrt{L} \approx 0.0184$, which matches the empirical
+distractor-distractor std almost exactly.  Targets sit roughly
+$4$--$5\sigma$ out in that null distribution.
+\pkey{Targets really are extreme on the template axis ($\sim 4\sigma$), but
+the absolute correlations involved are tiny ($r\approx 0.08$). High dimension
+makes \emph{small numerical correlations into large statistical
+distinctions}; keep that in mind whenever you see $r \sim 10^{-3}$ later.}
+
+\subsection{Chapter 5: Pairwise Pearson structure}
+\pintent{If targets share something acoustic, target--target pairs should be
+more Pearson-correlated than distractor--distractor or target--distractor
+pairs. We compute all three pairwise distributions and compare them.}
+
+Compute the full $300 \times 300$ correlation matrix and split the
+upper triangle into three pools by label:
+\emph{target--target} ($n=11{,}175$),
+\emph{distractor--distractor} ($n=11{,}175$),
+\emph{target--distractor} ($n=22{,}500$).
+
+\begin{table}[H]
+\centering
+\caption{Pairwise Pearson distributions by group.}
+\label{tab:pairwise}
+\begin{tabular}{lrrrr}
+\toprule
+Pool & mean & std & vs.\ zero ($t$, $p$) & vs.\ $dd$ (Welch $p$) \\
+\midrule
+target--target          & $+0.00561$ & $0.0183$ & $32.3,\ 2{\times}10^{-219}$ & $1.7{\times}10^{-119}$ \\
+distractor--distractor  & $-0.00017$ & $0.0186$ & $-0.95,\ 0.34$              & --- \\
+target--distractor      & $+0.00008$ & $0.0184$ & $0.66,\ 0.51$               & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Effect sizes: $d_{tt - dd} = 0.313$, $d_{tt - td} = 0.301$,
+$d_{dd - td} = -0.013$.  In words: \emph{targets} pairwise correlate
+slightly above zero; distractors and cross-pairs are statistically
+indistinguishable from zero.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.48\textwidth}
+  \figfit{stimuli-analyses/outputs/pearson/pariwise/all_data/distributions_histograms.png}
+  \caption{Three pairwise distributions overlaid.}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.48\textwidth}
+  \figfit{stimuli-analyses/outputs/pearson/pariwise/all_data/correlation_matrix_group_ordered_heatmap.png}
+  \caption{$300{\times}300$ correlation matrix, ordered targets-then-distractors.  The faint warm block in the upper-left is the entire effect.}
+\end{subfigure}
+\caption{Pairwise Pearson structure (Chapter~5).}
+\end{figure}
+\pkey{There \emph{is} a target--target excess ($\bar r_{tt} \approx +0.0056$
+vs.\ $-0.0002$ for distractors), Cohen's $d \approx 0.31$, and it is
+statistically air-tight ($p\sim 10^{-219}$). But the magnitude is the size of
+the noise std (both $\sim 0.018$). Targets are not a tight family; they have
+a shared mean offset of order $1\%$.}
+
+\subsection{Chapter 6: Target cohesion vs.\ selection rank}
+\pintent{If the cohesion in chapter 5 reflects the targets containing more of
+the template, the targets that are \emph{most} like the template should be
+more cohesive among themselves. Restrict to the top-$k$ most-template-like
+targets and recompute mean within-target Pearson, sweeping $k$.}
+
+Order targets by their template correlation $r(s_i, t_{\text{wall}})$,
+take the top $k$ for $k \in \{10, 20, \dots, 150\}$, and compute mean
+within-pool pairwise Pearson.  If extreme-template targets formed a
+tighter family, $\bar r_{tt}^{(k)}$ should rise as $k$ shrinks.
+
+\begin{table}[H]
+\centering
+\caption{Mean within-target pairwise $r$ for top-$k$ subsets.}
+\begin{tabular}{rrr}
+\toprule
+$k$ & $\bar r_{tt}^{(k)}$ & SE \\
+\midrule
+$10$  & $0.01189$ & $0.00275$ \\
+$20$  & $0.00671$ & $0.00131$ \\
+$50$  & $0.00618$ & $0.00051$ \\
+$100$ & $0.00565$ & $0.00026$ \\
+$150$ & $0.00561$ & $0.00017$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+There is a small but real top-tail bump (top~$10$: $\bar r \approx 0.012$,
+roughly double the full-set mean), then immediate convergence to the
+full-set value by $k \ge 30$.  Selection extremity drives a few extra
+percentage points of cohesion in the very top, no more.
+\pkey{Top-$10$ targets cohere about twice as strongly as the average target
+($\bar r \approx 0.012$ vs.\ $0.006$), but the bump is gone by $k=30$.
+Extremely template-aligned targets matter only at the very tail.}
+
+\subsection{Chapter 7: Template alignment vs.\ pairwise cohesion}
+\pintent{Now the same idea per-stimulus: does each target's \emph{individual}
+template alignment predict how similar it is to the other targets? A simple
+scatter and OLS line.}
+
+For each target $i$, plot $r(s_i, t_{\text{wall}})$ against
+$\bar r(s_i, S_{\text{tgt}\setminus i})$.  OLS regression gives:
+\[
+  \text{slope} = 0.0342,\qquad
+  R = 0.119,\qquad
+  R^2 = 0.014,\qquad
+  p = 0.148.
+\]
+Template alignment explains $\sim\!1.4\%$ of the variation in
+how-much-each-target-resembles-the-others.  The relationship is
+positive but extremely weak.
+
+\begin{figure}[H]
+\centering
+\figfit{stimuli-analyses/outputs/pearson/target-cohesion/ch7_template_vs_cohesion.png}
+\caption{Per-target template alignment vs.\ mean similarity to other targets.}
+\end{figure}
+\pkey{The relationship is positive but barely there ($R=0.12$, $R^2=1.4\%$,
+$p=0.15$). Template alignment is a small part of why a target resembles other
+targets; most variance in per-target cohesion is something else (or noise).}
+
+\subsection{Chapter 8: Pearson-based geometry of the full set}
+\pintent{If we take the $300\times 300$ Pearson similarity as a proxy for
+stimulus geometry, what does that geometry look like? We embed (MDS, PCA,
+$t$-SNE), cluster blindly, and separately ask whether the experimenter's
+target--distractor mean-difference direction is a statistically privileged
+axis even when no clustering recovers it.}
+
+Build the symmetric distance $D = \mathrm{clip}(1 - R, 0, \cdot)$ from
+the full $300{\times}300$ Pearson similarity, and embed.
+
+\paragraph{Classical MDS.}
+Double-centre the squared-distance matrix to form the Gram matrix
+\[
+  B \;=\; -\tfrac{1}{2}\,J\,(D \odot D)\,J,
+  \qquad
+  J = I - \tfrac{1}{n}\mathbf 1\mathbf 1^\top,
+\]
+take eigendecomposition $B = U\Lambda U^\top$, and use the top-$k$
+positive eigenvectors scaled by $\sqrt{\Lambda_+}$ as coordinates.
+
+\paragraph{Linear PCA on raw waveforms} for comparison.
+
+\paragraph{$t$-SNE} on the precomputed Pearson distance.
+
+\paragraph{Clustering} with agglomerative average-linkage and spectral
+$k$-means, $k \in \{2,3,4,5\}$, scored by silhouette and Adjusted Rand
+Index (ARI) against experimenter labels.
+
+\paragraph{Label axis.}
+Define the unit direction
+\[
+  \hat u
+  \;=\;
+  \frac{\bar s_{\text{tgt}} - \bar s_{\text{dist}}}
+       {\|\bar s_{\text{tgt}} - \bar s_{\text{dist}}\|},
+\]
+project every clip onto $\hat u$, and compute Fisher's ratio
+$F = (\mu_t - \mu_d)^2 / (\sigma_t^2 + \sigma_d^2)$ and the variance
+fraction $\mathrm{Var}(s\cdot\hat u)\,/\,\sum_j \mathrm{Var}(s_{\cdot j})$.
+Compare both against $2{,}000$ random unit directions.
+
+\begin{table}[H]
+\centering
+\caption{Chapter 8 results.}
+\begin{tabular}{lrrr}
+\toprule
+Quantity & Observed & Null mean & $p$ \\
+\midrule
+MDS top-2 variance fraction        & $1.63\%$ & --- & --- \\
+PCA top-2 variance fraction        & $1.11\%$ & --- & --- \\
+Best silhouette ($k=2$, spectral)  & $0.0033$ & --- & --- \\
+Best ARI vs.\ labels ($k=2$, spectral) & $0.083$ & --- & --- \\
+Fisher ratio along label axis      & $37.67$  & $0.009$ & $<10^{-3}$ \\
+Variance fraction along label axis & $0.493\%$ & $0.034\%$ & $<10^{-3}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretation.}
+The set has no low-dimensional shape: the leading two MDS components
+explain only $1.6\%$ of Gram variance.  Generic clustering finds
+nothing aligned with labels (best ARI $= 0.08$).  But the
+target--distractor mean-difference direction is a statistically
+privileged axis ($\sim\!37\times$ stronger than random) that simply
+isn't dominant enough ($\sim\!0.5\%$ of waveform variance) to organise
+clusters.  Targets are biased in a single shared direction (toward
+\texttt{wall.wav}) without being internally tight.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.32\textwidth}
+\figfit{stimuli-analyses/outputs/pearson/ch8-geometry/ch8_mds.png}
+\caption{Classical MDS}
+\end{subfigure}
+\begin{subfigure}[t]{0.32\textwidth}
+\figfit{stimuli-analyses/outputs/pearson/ch8-geometry/ch8_pca.png}
+\caption{PCA}
+\end{subfigure}
+\begin{subfigure}[t]{0.32\textwidth}
+\figfit{stimuli-analyses/outputs/pearson/ch8-geometry/ch8_tsne.png}
+\caption{$t$-SNE}
+\end{subfigure}\\[4pt]
+\begin{subfigure}[t]{0.48\textwidth}
+\figfit{stimuli-analyses/outputs/pearson/ch8-geometry/ch8_silhouette_ari.png}
+\caption{Silhouette and ARI vs.\ $k$}
+\end{subfigure}
+\begin{subfigure}[t]{0.48\textwidth}
+\figfit{stimuli-analyses/outputs/pearson/ch8-geometry/ch8_label_axis_projection.png}
+\caption{Projection onto the label axis $\hat u$}
+\end{subfigure}
+\caption{Chapter 8 outputs.}
+\end{figure}
+\pkey{Two facts you have to hold in your head simultaneously: (a) generic
+blind clustering finds nothing label-related (best ARI $0.08$, best silhouette
+$0.003$), but (b) the explicit label-axis direction $\hat u$ is
+\emph{statistically privileged} ($F=37.7$, $p<10^{-3}$, $\sim 37\times$
+stronger than a random direction). The label is a real but extremely
+low-variance direction ($0.49\%$ of waveform variance) --- too weak to drive
+clusters but too systematic to be noise.}
+
+\subsection{Chapter 9: Template projection and residual structure}
+\pintent{Why does the target--target Pearson cohesion exist at all? Pairwise
+Pearson decomposes \emph{exactly} into a contribution from the template
+projection $\alpha_i t$ plus a contribution from the residuals $e_i = s_i -
+\alpha_i t$. We compute both and see which one carries the cohesion.}
+
+\subsubsection{Decomposition}
+
+Let $t = t_{\text{wall}}$ centred, and $s_i$ centred clip $i$.  The
+OLS projection is
+\begin{equation}
+  \alpha_i \;=\; \frac{\langle s_i, t\rangle}{\langle t, t\rangle},
+  \qquad
+  \hat s_i = \alpha_i\,t,
+  \qquad
+  e_i = s_i - \hat s_i.
+\end{equation}
+Pairwise Pearson decomposes exactly:
+\begin{equation}
+  \langle s_i, s_j\rangle
+  \;=\;
+  \alpha_i \alpha_j \langle t, t\rangle
+  \;+\;
+  \langle e_i, e_j\rangle,
+\end{equation}
+and dividing by $\sigma_{s_i}\sigma_{s_j}$ gives
+\begin{equation}
+  r(s_i, s_j)
+  \;=\;
+  \underbrace{\frac{\alpha_i \alpha_j \,\|t\|^2}{\sigma_{s_i}\sigma_{s_j}}}_{\text{template contribution}}
+  \;+\;
+  \underbrace{\frac{\langle e_i, e_j\rangle}{\sigma_{s_i}\sigma_{s_j}}}_{\text{residual contribution}}.
+\end{equation}
+
+\begin{lstlisting}[caption={Decomposition core (\texttt{ch9-projection-residual.py}).}]
+alpha = (X @ t) / (t @ t)              # (n,)
+proj  = np.outer(alpha, t)             # (n, L)
+resid = X - proj                       # (n, L)
+sigma = X.std(axis = 1, ddof = 0)      # (n,)
+tmpl_contrib = np.outer(alpha, alpha) * (t @ t) / np.outer(sigma, sigma)
+resid_contrib = (resid @ resid.T) / L  / np.outer(sigma, sigma)
+# r_total[i,j] == tmpl_contrib[i,j] + resid_contrib[i,j]   (verified <= 1.4e-16)
+\end{lstlisting}
+
+\subsubsection{Mean contributions}
+
+\begin{table}[H]
+\centering
+\caption{Decomposition of mean pairwise Pearson into template and residual parts.}
+\begin{tabular}{lrrrr}
+\toprule
+Pool & $\overline{r}$ & template part & residual part & frac.\ template \\
+\midrule
+target--target          & $+5.61\!\times\!10^{-3}$ & $+5.58\!\times\!10^{-3}$ & $+3.5\!\times\!10^{-5}$ & $99.4\%$ \\
+distractor--distractor  & $-1.67\!\times\!10^{-4}$ & $\sim 0$                 & $-1.67\!\times\!10^{-4}$ & $\sim 0$ \\
+target--distractor      & $+8.1\!\times\!10^{-5}$  & $\sim 0$                 & $+8.1\!\times\!10^{-5}$  & $\sim 0$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+After residualising the template, target--target cohesion is no longer
+distinguishable from zero
+($t = 0.20$, $p = 0.84$, Wilcoxon $p = 0.57$, Welch
+before-vs-after $p = 2 \times 10^{-112}$).  The targets cohere
+\emph{entirely} because they each contain a small piece of
+\texttt{wall.wav}; once removed, they revert to noise.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.48\textwidth}
+\figfit{stimuli-analyses/outputs/pearson/ch9-projection-residual/ch9_pearson_decomposition_bar.png}
+\caption{Total $\bar r$ split into template + residual contributions.}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.48\textwidth}
+\figfit{stimuli-analyses/outputs/pearson/ch9-projection-residual/ch9_before_after_cohesion.png}
+\caption{Before/after residualisation, by group.}
+\end{subfigure}
+\end{figure}
+
+\subsubsection{Per-sample contributions (Chapter 9b)}
+
+The pairwise contribution at sample $\ell$ is
+$c^{(ij)}_\ell = s_{i,\ell}\,s_{j,\ell}$.
+Averaging $c^{(ij)}_\ell$ over all target--target pairs gives a per-sample
+profile of \emph{which timepoints carry the target--target similarity}.
+Correlating that profile against $t_\ell^2$ (template energy),
+$|t_\ell|$, and $t_\ell$ (signed):
+
+\begin{table}[H]
+\centering
+\caption{Per-sample target--target contribution profile vs.\ template features.}
+\begin{tabular}{lrr}
+\toprule
+Comparison & $r$ & $p$ \\
+\midrule
+$\overline{c^{(tt)}_\ell}$ vs.\ $t_\ell^2$  & $+0.623$ & $\approx 10^{-317}$ \\
+$\overline{c^{(tt)}_\ell}$ vs.\ $|t_\ell|$  & $+0.575$ & $\approx 10^{-260}$ \\
+$\overline{c^{(tt)}_\ell}$ vs.\ $t_\ell$    & $+0.224$ & $\approx 10^{-35}$ \\
+$\overline{c^{(dd)}_\ell}$ vs.\ $t_\ell^2$  & $+0.007$ & $0.70$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The samples that carry target--target similarity are the same samples
+where the template is loud.  Distractor pairs show no such pattern.
+\pkey{$99.4\%$ of the target--target mean Pearson is the template
+contribution $\alpha_i\alpha_j\|t\|^2/(\sigma_i\sigma_j)$. Once that is
+subtracted, target--target cohesion is statistically zero ($p=0.84$). Targets
+are \emph{not} a coherent acoustic family; they are a set of clips that each
+contain a small piece of \texttt{wall.wav}.}
+
+\subsection{Chapter 10: Null models for Pearson structure}
+\pintent{The target--target excess is small ($\Delta\bar r \approx 0.006$).
+Is even that meaningful? Two complementary nulls: (a) replace all $300$ clips
+with fresh white noise and ask whether $\bar r_{tt}$ this big could happen by
+chance (white-noise null); (b) keep the data fixed but shuffle the labels and
+recompute (label-permutation null).}
+
+Two complementary nulls.
+
+\paragraph{White-noise null.}
+Synthesise $300$ clips of length $L$ as iid Gaussian noise, compute
+their pairwise Pearson, take mean within-set.  Repeat $500$ times.
+\paragraph{Label-permutation null.}
+Hold the actual $300{\times}300$ matrix fixed, permute the
+target/distractor labels, recompute mean within-tt and within-dd.
+Repeat $5{,}000$ times.
+
+\begin{table}[H]
+\centering
+\caption{Null-model summary (Chapter 10).}
+\begin{tabular}{lrrrr}
+\toprule
+Test & observed & null mean & null std & $p$ \\
+\midrule
+white-noise null, $\bar r_{tt}$    & $+0.00561$ & $\sim 0$        & $1.7\!\times\!10^{-4}$ & $0.002$ \\
+white-noise null, $\bar r_{dd}$    & $-0.00017$ & $\sim 0$        & $1.7\!\times\!10^{-4}$ & $0.33$ \\
+label-perm, $\bar r_{tt}$           & $+0.00561$ & $+0.00140$      & $2.2\!\times\!10^{-4}$ & $<2\!\times\!10^{-4}$ \\
+label-perm, $\bar r_{tt}-\bar r_{dd}$ & $+0.00578$ & $+6\!\times\!10^{-6}$ & $4.1\!\times\!10^{-4}$ & $<2\!\times\!10^{-4}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The target--target cohesion sits at the $100$th percentile of both
+nulls; distractors are indistinguishable from white noise (which is
+exactly what the selection rule tried to achieve).
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.48\textwidth}
+\figfit{stimuli-analyses/outputs/pearson/ch10-null-models/ch10_white_noise_null.png}
+\caption{White-noise null.}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.48\textwidth}
+\figfit{stimuli-analyses/outputs/pearson/ch10-null-models/ch10_label_permutation_null.png}
+\caption{Label-permutation null.}
+\end{subfigure}
+\end{figure}
+\pkey{The observed cohesion sits at the $100$th percentile of both nulls
+($p=0.002$ white-noise, $p<2\times 10^{-4}$ label-permutation). The
+distractor pool is indistinguishable from white noise, exactly as the
+selection rule intended.}
+
+% =====================================================================
+\section{Non-Pearson metric analyses (Part III)}
+
+\subsection{Chapter 11: Choosing alternative metrics}
+\pintent{The selection rule was Pearson on raw centred waveforms, but a human
+listener perceives audio through filters that look very little like that.
+We define four perceptually-motivated similarity measures (envelope-based,
+spectral, cepstral, time-shift-tolerant) so that subsequent chapters can ask
+the label question through several different lenses.}
+
+Five similarity measures, each chosen for an interpretable axis of
+acoustic structure.
+
+\paragraph{1. Pearson raw} (reference).
+$r(s_i, s_j) = \cos(s_i, s_j)$ on centred waveforms.
+
+\paragraph{2. Lagged cross-correlation, $\pm 200\,\mathrm{ms}$.}
+Full sample-domain cross-correlation via FFT:
+$x_{ij}(\tau) = \sum_t s_{i,t} s_{j,t+\tau}\,/\,(\|s_i\|\|s_j\|)$,
+report $\max_{|\tau|\le \tau_{\max}} |x_{ij}(\tau)|$.  Captures similarity
+that survives small temporal shifts.
+
+\paragraph{3. Envelope correlation.}
+Compute the analytic-signal magnitude (Hilbert envelope), low-pass with
+a $161$-sample moving average ($\sim 50\,\mathrm{Hz}$ cutoff at $8\,\mathrm{kHz}$),
+then Pearson on envelopes.  Removes carrier phase, keeps loudness
+contour.
+
+\paragraph{4. Log-spectrum correlation.}
+$\tilde s = \log(1 + |\mathcal F(s)|)$ from the real FFT, then Pearson
+across frequency bins.  Compares spectral shape, ignores phase.
+
+\paragraph{5. MFCC cosine.}
+$12$ Mel-frequency cepstral coefficients per frame (dropping $C_0$,
+which collapses to a constant under RMS normalisation), summarised by
+mean and std across frames, $z$-scored per dimension across clips,
+cosine similarity.  Approximates a coarse speech-style timbral
+descriptor.
+
+\begin{lstlisting}[caption={Lagged cross-correlation core.}]
+F = next_fast_len(2*L - 1)
+S = np.fft.rfft(X, n = F, axis = 1)            # (n, F/2+1)
+norms = np.linalg.norm(X, axis = 1)
+for i in range(n):
+    cc = np.fft.irfft(S[i] * np.conj(S), n = F, axis = 1)
+    cc = np.concatenate([cc[:, -max_lag:], cc[:, :max_lag+1]], axis = 1)
+    out[i, :] = np.max(np.abs(cc), axis = 1) / (norms[i] * norms)
+\end{lstlisting}
+\pkey{Five orthogonal lenses on the same $300$ clips. Pearson is the
+selection metric; the other four ask whether the label structure shows up
+under time-shift-tolerant, envelope, spectral, or cepstral similarity.}
+
+\subsection{Chapter 12: Label-aware separation under each metric}
+\pintent{Repeat the chapter 5 target--target / distractor--distractor split
+for each non-Pearson metric. If any of these acoustic descriptions agreed
+with the label, we would see a non-trivial Cohen's $d$.}
+
+Same target--target / distractor--distractor / target--distractor
+decomposition as Chapter~5, repeated for each metric.
+
+\begin{table}[H]
+\centering
+\caption{Cohen's $d$ for $tt$ vs.\ $dd$ under each metric.}
+\label{tab:ch12}
+\begin{tabular}{lrrr}
+\toprule
+Metric & $\bar r_{tt}$ & $\bar r_{dd}$ & $d_{tt-dd}$ \\
+\midrule
+pearson\_raw       & $+0.00561$ & $-0.00017$ & $\mathbf{0.313}$ \\
+lagged\_xcorr\_max & $+0.06186$ & $+0.06165$ & $0.037$ \\
+envelope\_corr     & $+0.74480$ & $+0.74344$ & $0.022$ \\
+log\_spectrum\_corr & $+0.17737$ & $+0.17726$ & $0.005$ \\
+mfcc\_cosine       & $-0.00072$ & $-0.00137$ & $0.003$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretation.}
+Pearson is the only metric under which the target/distractor split is
+visible at all.  Under envelope correlation the average pair has
+$r \approx 0.74$ regardless of label --- all clips look alike to the
+envelope, because they all share the same RMS-normalised amplitude
+contour profile.  The label is a property of the metric, not of the
+stimuli.
+
+\begin{figure}[H]
+\centering
+\figfit{stimuli-analyses/outputs/non_pearson/ch12-label-aware/ch12_relative_to_pearson.png}
+\caption{Per-metric label separation, normalised against Pearson.}
+\end{figure}
+\pkey{Pearson is the only metric under which the label is even faintly
+visible ($d=0.31$). Lagged xcorr, envelope, log-spectrum, MFCC all give
+$d \le 0.04$. The target/distractor distinction is a Pearson artefact, not
+an acoustic property a listener could realistically pick up.}
+
+\subsection{Chapter 13: Label-blind clustering under each metric}
+\pintent{Forget the labels and ask: under each metric, does the set break
+into natural clusters at $k=2$? If acoustic structure exists that is not the
+experimenter's split, blind clustering should find it.}
+
+Convert similarity $s_{ij} \in [-1,1]$ to distance $d_{ij} = \mathrm{clip}(1 - s_{ij}, 0, 2)$
+and to affinity $a_{ij} = (s_{ij} + 1)/2$.  Cluster at $k=2$ with
+\begin{itemize}
+\item agglomerative average linkage on $D$,
+\item spectral $k$-means on $A$,
+\end{itemize}
+and score with silhouette (intrinsic) and ARI vs.\ experimenter labels.
+
+\begin{table}[H]
+\centering
+\caption{Chapter 13 results, $k=2$.}
+\begin{tabular}{llrrr}
+\toprule
+Metric & Method & sizes & silhouette & ARI \\
+\midrule
+pearson\_raw       & agglomerative & $[287, 13]$ & $0.003$ & $0.005$ \\
+pearson\_raw       & spectral      & $[156, 144]$ & $0.003$ & $0.083$ \\
+lagged\_xcorr\_max & agglomerative & $[256, 44]$  & $0.001$ & $-0.001$ \\
+lagged\_xcorr\_max & spectral      & $[166, 134]$ & $0.001$ & $0.022$ \\
+envelope\_corr     & agglomerative & $[294, 6]$   & $\mathbf{0.151}$ & $-0.000$ \\
+envelope\_corr     & spectral      & $[118, 182]$ & $0.087$ & $-0.003$ \\
+log\_spectrum\_corr& agglomerative & $[298, 2]$   & $0.011$ & $-0.000$ \\
+log\_spectrum\_corr& spectral      & $[145, 155]$ & $0.005$ & $0.000$ \\
+mfcc\_cosine       & agglomerative & $[203, 97]$  & $0.055$ & $-0.001$ \\
+mfcc\_cosine       & spectral      & $[154, 146]$ & $0.086$ & $-0.003$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The best silhouette ($0.15$, envelope agglomerative) corresponds to a
+$294/6$ split, i.e.\ peeling six acoustic outliers off the rest.  No
+clustering recovers the experimenter labels (max ARI $0.083$).
+\pkey{The best cluster split (envelope agglomerative, silhouette $0.15$)
+peels off six acoustic outliers from the other $294$. There is no clean
+$k=2$ partition under any metric, and certainly none aligned with the
+experimenter's labels.}
+
+\subsection{Chapter 14: Cross-metric synthesis}
+\pintent{Bring the five metrics onto a single scoreboard along three axes
+(target cohesion, label separation, intrinsic clustering), and check whether
+the metrics describe redundant geometries (Mantel-style cross-metric
+correlations).}
+
+Three axes summarise each metric:
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Target cohesion} (z-score of $\bar r_{tt}$ against the
+metric-specific off-diagonal distribution),
+\item \textbf{Label separation} (Cohen's $d_{tt - dd}$),
+\item \textbf{Intrinsic clustering} (best silhouette over methods at $k=2$).
+\end{enumerate}
+
+\begin{table}[H]
+\centering
+\caption{Cross-metric ranking.}
+\begin{tabular}{lrrr}
+\toprule
+Metric & cohesion ($z$) & label sep.\ ($d$) & intrinsic silh. \\
+\midrule
+pearson\_raw         & $\mathbf{0.227}$ & $\mathbf{0.313}$ & $0.003$ \\
+lagged\_xcorr\_max   & $0.017$ & $0.037$ & $0.001$ \\
+envelope\_corr       & $0.014$ & $0.022$ & $\mathbf{0.151}$ \\
+log\_spectrum\_corr  & $0.006$ & $0.005$ & $0.011$ \\
+mfcc\_cosine         & $0.012$ & $0.003$ & $0.086$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Mantel-style cross-metric similarity.}
+Flatten each metric's upper-triangular pair vector and compute
+Pearson's $r$ between metrics.  Maximum off-diagonal $|r| = 0.078$
+(lagged vs.\ log-spectrum), most $|r| < 0.01$.  The five metrics are
+nearly orthogonal as ways of describing this set.  No metric is a
+disguised duplicate of another.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.55\textwidth}
+\figfit{stimuli-analyses/outputs/non_pearson/ch14-comparison/ch14_axis_rankings.png}
+\caption{Per-metric rankings on the three axes.}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.40\textwidth}
+\figfit{stimuli-analyses/outputs/non_pearson/ch14-comparison/ch14_cross_metric_mantel.png}
+\caption{Cross-metric Mantel correlations.}
+\end{subfigure}
+\end{figure}
+\pkey{The five metrics are nearly orthogonal as descriptions of this set
+(max cross-metric $|r|=0.078$). No metric is a redundant copy of another;
+each really is asking a different question. The label is visible only to
+Pearson; intrinsic clustering structure is visible only to envelope.}
+
+% =====================================================================
+\section{Synthesis and behavioural cross-check (Part IV)}
+
+\subsection{Chapter 15: What did subjects do?}
+\pintent{Even though Book~1 is about the stimulus set, we owe ourselves a
+one-pass behavioural cross-check: do any of these metrics relate to subject
+responses? If not, that is itself the most informative possible result.
+Full subject-side analysis lives in \texttt{book2\_writeup.pdf}.}
+
+The Book~1 mandate is stimulus-only, but a one-pass behavioural
+sanity-check answers the question \emph{``does any of this matter for
+how subjects responded?''} without committing to a full Book~2.
+
+\paragraph{Trials.}
+$26$ subjects across two sites, $7{,}748$ trials total
+($\sim 2 \times 150$ trials per subject).  Each trial yields
+\texttt{(stimulus\_number, true\_label, subject\_response)}.
+
+\paragraph{Per-stimulus feature.}
+For each metric $M$ and each clip $i$ in block $B$,
+\[
+  \Delta^M_i
+  \;=\;
+  \overline{M(s_i, s_j)}_{j\in B,\, \text{label}_j = \text{tgt},\, j \ne i}
+  \;-\;
+  \overline{M(s_i, s_j)}_{j\in B,\, \text{label}_j = \text{dist},\, j \ne i}.
+\]
+A clip with large positive $\Delta^M$ is more like targets than
+distractors under $M$.
+
+\paragraph{Stimulus-level prediction.}
+Pearson $r$ between $\Delta^M_i$ and the empirical
+$p_i = \Pr(\text{subject called } s_i \text{ a target})$:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Metric & $r$ & $p$ \\
+\midrule
+pearson\_raw        & $+0.094$ & $0.11$ \\
+envelope\_corr      & $+0.078$ & $0.18$ \\
+mfcc\_cosine        & $+0.059$ & $0.31$ \\
+log\_spectrum\_corr & $+0.044$ & $0.45$ \\
+lagged\_xcorr\_max  & $-0.007$ & $0.91$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Trial-level prediction (logistic AUC).}
+Predict $\Pr(\text{called target})$ from $\Delta^M$ alone, vs.\ from
+the experimenter's true label:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lr}
+\toprule
+Predictor & AUC \\
+\midrule
+true\_label\_baseline & $0.510$ \\
+envelope\_corr        & $0.510$ \\
+mfcc\_cosine          & $0.507$ \\
+log\_spectrum\_corr   & $0.504$ \\
+lagged\_xcorr\_max    & $0.502$ \\
+pearson\_raw          & $0.490$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Cluster vs.\ response agreement.}
+Match each metric's label-blind $k=2$ clustering against the binary
+subject response, picking the better of the two polarities:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{llr}
+\toprule
+Metric & method & match rate \\
+\midrule
+log\_spectrum\_corr & agglomerative & $\mathbf{0.530}$ \\
+envelope\_corr      & agglomerative & $0.529$ \\
+pearson\_raw        & agglomerative & $0.526$ \\
+mfcc\_cosine        & agglomerative & $0.524$ \\
+lagged\_xcorr\_max  & agglomerative & $0.522$ \\
+true\_label\_baseline & ---         & $0.510$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.48\textwidth}
+\figfit{stimuli-analyses/outputs/pearson/ch15-subject-prediction/ch15_metric_trial_auc.png}
+\caption{Trial-level AUC.}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.48\textwidth}
+\figfit{stimuli-analyses/outputs/pearson/ch15-subject-prediction/ch15_response_agreement.png}
+\caption{Cluster-vs-response agreement.}
+\end{subfigure}
+\end{figure}
+
+\textbf{Interpretation.}
+\begin{enumerate}[leftmargin=*]
+\item Subjects performed at chance.  Mean accuracy $0.510$, hit rate
+$0.480$, false-alarm rate $0.460$.
+\item No metric, including the experimenter labels, predicts trial
+responses meaningfully.
+\item The label-blind agglomerative clusters consistently beat the
+experimenter labels by $\sim 2$ percentage points.  These clusters tend
+to isolate small acoustic-outlier groups, suggesting subjects were
+weakly tracking gross acoustic salience rather than the imposed
+identity contrast.
+\end{enumerate}
+\pkey{Subjects were at chance (mean accuracy $0.510$). No metric --- not even
+the experimenter labels --- predicts trial responses meaningfully (best AUC
+$0.510$). Surprisingly, blind acoustic clusters fit subject responses
+\emph{better} than the experimenter labels, by about $2$ points. This
+motivated Book~2.}
+
+% =====================================================================
+\section{What the stimulus set actually contains}
+
+Pulling it all together:
+
+\begin{description}
+\item[Structure imposed by design.]
+A small ($\Delta\bar r \approx 0.006$, $d \approx 0.31$) but
+statistically robust target--distractor separation under Pearson, driven
+\emph{entirely} by shared projection onto \texttt{wall.wav}.
+\item[Structure actually present.]
+Beyond the wall-projection direction, essentially noise.  Targets are
+not internally cohesive once the template is removed.  No metric
+reveals interesting intrinsic clusters; the set is a $300$-point cloud
+in a high-dimensional space with one weak preferred direction.
+\item[Structure visible only under some metrics.]
+Only Pearson sees the label.  Under any other reasonable acoustic
+similarity (envelope, lagged $r$, log-spectrum, MFCC), targets and
+distractors are statistically indistinguishable.  Subjects, who
+presumably do not perform sample-level Pearson against the template in
+their heads, would have no acoustic basis to recover the labels.
+\item[Implications for subject analyses.]
+Behavioural performance was at chance, consistent with the conclusion
+above.  The interesting variance for downstream books is between
+\emph{subjects}, not between stimuli.  Per-stimulus prediction of
+behaviour by acoustic features is a dead end with this stimulus set.
+\end{description}
+
+% =====================================================================
+\appendix
+\section{File map}
+
+\paragraph{Scripts (all under \texttt{stimuli-analyses/}).}
+\begin{itemize}[leftmargin=*]
+\item \texttt{pairwise-pearson.py} --- Chapter~5
+\item \texttt{target-cohesion-via-rank.py} --- Chapters 6, 7
+\item \texttt{ch8-pearson-geometry.py} --- Chapter 8
+\item \texttt{ch9-projection-residual.py} --- Chapter 9
+\item \texttt{ch9b-per-sample-contributions.py} --- Chapter 9b
+\item \texttt{ch10-null-models.py} --- Chapter 10
+\item \texttt{ch11-non-pearson-metrics.py} --- Chapter 11 (caches metrics)
+\item \texttt{ch12-label-aware-non-pearson.py} --- Chapter 12
+\item \texttt{ch13-label-blind-non-pearson.py} --- Chapter 13
+\item \texttt{ch14-metric-comparison.py} --- Chapter 14
+\item \texttt{ch15-subject-response-prediction.py} --- Chapter 15
+\end{itemize}
+
+\paragraph{Outputs.}
+Tables and figures live under
+\texttt{stimuli-analyses/outputs/\{pearson,non\_pearson\}/<chapter>/}.
+
+\section{Key formulae cheat sheet}
+
+\begin{align*}
+r(s, t)
+  &\;=\; \frac{\langle s_c, t_c\rangle}{\|s_c\|\,\|t_c\|}
+   \qquad (\text{centred Pearson}) \\
+\alpha_i
+  &\;=\; \frac{\langle s_i, t\rangle}{\langle t, t\rangle}
+   \qquad (\text{OLS template projection}) \\
+e_i
+  &\;=\; s_i - \alpha_i t
+   \qquad (\text{residual}) \\
+r(s_i, s_j)
+  &\;=\; \frac{\alpha_i\alpha_j\|t\|^2 + \langle e_i, e_j\rangle}{\sigma_{s_i}\sigma_{s_j}} \\
+F
+  &\;=\; \frac{(\mu_t - \mu_d)^2}{\sigma_t^2 + \sigma_d^2}
+   \qquad (\text{Fisher discriminant ratio}) \\
+\hat u
+  &\;=\; \frac{\bar s_{\text{tgt}} - \bar s_{\text{dist}}}{\|\bar s_{\text{tgt}} - \bar s_{\text{dist}}\|}
+   \qquad (\text{label axis}) \\
+B
+  &\;=\; -\tfrac{1}{2}\,J\,(D \odot D)\,J,\quad J = I - n^{-1}\mathbf 1\mathbf 1^\top
+   \qquad (\text{classical MDS Gram}) \\
+d
+  &\;=\; \frac{\mu_a - \mu_b}{\sqrt{\tfrac{1}{2}(\sigma_a^2 + \sigma_b^2)}}
+   \qquad (\text{Cohen's }d).
+\end{align*}
+
+\end{document}

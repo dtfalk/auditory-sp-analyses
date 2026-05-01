@@ -1,0 +1,28 @@
+\contentsline {section}{\numberline {1}What this book is and how to read it}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Trial data schema (the only column-level fact you need)}{2}{subsection.1.1}%
+\contentsline {section}{\numberline {2}Chapter 16 -- Signal-detection alignment and response bias}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Plain-English intent}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Intuitive formula walkthrough}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Result interpretation}{3}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Reader takeaway}{4}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Chapter 17 -- Internal response consistency}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Plain-English intent}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Intuitive formula walkthrough}{6}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Result interpretation}{6}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Reader takeaway}{6}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Chapter 18 -- Trial-level logistic prediction}{7}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Plain-English intent}{7}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Intuitive formula walkthrough}{7}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Result interpretation}{8}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Reader takeaway}{8}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Chapter 19 -- Response geometry and RSA}{9}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Plain-English intent}{9}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Intuitive formula walkthrough}{9}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Result interpretation}{9}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Reader takeaway}{10}{subsection.5.4}%
+\contentsline {section}{\numberline {6}Chapter 20 -- Latent response strategies}{10}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Plain-English intent}{10}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Intuitive formula walkthrough}{10}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Result interpretation}{11}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Reader takeaway}{12}{subsection.6.4}%
+\contentsline {section}{\numberline {7}Synthesis}{12}{section.7}%

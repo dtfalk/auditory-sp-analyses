@@ -1,0 +1,502 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue!50!black, urlcolor=blue!50!black}
+
+% Cap any included figure so it fits on the page.
+\newcommand{\figfit}[1]{\includegraphics[width=\linewidth,height=0.75\textheight,keepaspectratio]{#1}}
+
+\title{Book 2: Subject-behavioural analysis of the auditory superstitious-perception task}
+\author{Auditory SP analyses}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\bigskip
+
+%==============================================================================
+\section{What this book is and how to read it}
+%==============================================================================
+
+Book 1 was about the \emph{stimuli}: how five different acoustic-similarity
+metrics describe the relationships between the 300 stimuli used in the
+experiment, and how those relationships interact with the experimenter's
+target / distractor labelling. The headline result of Book 1 was that the
+target / distractor split explains only a tiny fraction of stimulus--stimulus
+variance, but it is statistically real (Fisher $F\approx 37.7$, label-axis
+variance fraction $0.49\%$, $p<10^{-3}$).
+
+Book 2 is about the \emph{subjects}. Twenty-six subjects across two sites
+(Oberlin, $N=16$; UChicago, $N=10$) each saw 300 stimuli (150 in a
+\texttt{full\_sentence} block and 150 in an \texttt{imagined\_sentence} block)
+and gave a binary ``target / not target'' response per trial, for $7748$
+total trials.
+
+The questions for Book 2 are:
+
+\begin{enumerate}
+\item \textbf{Alignment.} How well do subjects' responses agree with the
+      experimenter's labels, separating sensitivity from response bias?
+      (Chapter 16.)
+\item \textbf{Internal consistency.} If a subject's responses are not aligned
+      with the labels, are they nonetheless \emph{consistent} -- that is,
+      do they treat acoustically-similar stimuli the same way?
+      (Chapter 17.)
+\item \textbf{Predictability from acoustics.} Can the five Book 1 similarity
+      metrics predict trial-by-trial responses better than the experimenter
+      labels alone? (Chapter 18.)
+\item \textbf{Group geometry.} If we build a behavioural distance between
+      stimuli purely from how often subjects co-assign them, does the
+      resulting geometry look like the label geometry, or like the geometry
+      of any acoustic metric? (Chapter 19.)
+\item \textbf{Latent strategies.} Do subjects cluster into qualitatively
+      different response strategies? (Chapter 20.)
+\end{enumerate}
+
+Two pieces of context to keep in mind throughout:
+
+\begin{itemize}
+\item \emph{No within-subject stimulus repeats.} A given subject sees each of
+      their 300 stimuli exactly once, so classical test--retest reliability is
+      not directly available. Internal consistency must therefore be defined
+      across stimuli (chapter 17), not across repetitions.
+\item \emph{Block-conditional structure.} Each of the two blocks
+      (\texttt{full\_sentence}, \texttt{imagined\_sentence}) has its own
+      independent pool of 150 stimuli. All similarity-derived features in this
+      book are computed within block, so a stimulus is compared only to other
+      stimuli a subject could have heard in the same block.
+\end{itemize}
+
+\subsection{Trial data schema (the only column-level fact you need)}
+
+The per-subject CSVs have one row per trial with the columns:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Column & Meaning \\
+\midrule
+\texttt{Subject Number}              & participant ID \\
+\texttt{Block Scheme}                & e.g.\ \texttt{full\_sentence} or \texttt{imagined\_sentence} \\
+\texttt{Stimulus Number}             & integer ID of the audio file \\
+\texttt{Stimulus Type}               & \textbf{experimenter ground truth} (target / distractor) \\
+\texttt{Subject Response}            & subject's binary response (target / distractor) \\
+\texttt{Play Count}                  & how many times the audio was replayed \\
+\texttt{Trial Start Timestamp}       & onset of the trial \\
+\texttt{Play Button Clicked Timestamp} & first replay click \\
+\texttt{Audio Start / End Timestamp} & playback boundaries \\
+\texttt{Subject Response Timestamp}  & when the response was logged \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent So \texttt{Stimulus Type} is the \emph{label} (what the experimenter
+called it) and \texttt{Subject Response} is the \emph{response} (what the
+subject called it). Throughout this book, \texttt{true\_target} is the
+binary indicator that \texttt{Stimulus Type == ``target''} and
+\texttt{called\_target} is the binary indicator that
+\texttt{Subject Response == ``target''}.
+
+%==============================================================================
+\section{Chapter 16 -- Signal-detection alignment and response bias}
+%==============================================================================
+
+\subsection{Plain-English intent}
+
+A subject can fail to match the experimenter's labels for two very different
+reasons. They might genuinely be unable to discriminate targets from
+distractors (\emph{low sensitivity}), or they might discriminate well but
+prefer one response (\emph{response bias}), e.g.\ calling everything
+``target''. Signal-detection theory (SDT) gives us two numbers,
+\(d'\) (sensitivity) and \(C\) (criterion), that decouple these.
+
+\subsection{Intuitive formula walkthrough}
+
+Let $H$ be the hit rate (probability of saying ``target'' on a real target)
+and $F$ the false-alarm rate (probability of saying ``target'' on a
+distractor). Defining $z(\cdot) = \Phi^{-1}(\cdot)$ (the inverse standard
+normal),
+\[
+d' = z(H) - z(F), \qquad C = -\tfrac{1}{2}\bigl(z(H) + z(F)\bigr).
+\]
+$d'$ measures how separated the underlying ``target'' and ``distractor''
+distributions are on whatever internal axis the subject uses, in units of
+standard deviations. $C=0$ means a neutral criterion; $C<0$ is liberal
+(prefers ``target''); $C>0$ is conservative.
+
+To avoid $\pm\infty$ when $H$ or $F$ hits $0$ or $1$, we use the
+log-linear correction (Hautus 1995): replace counts $h, f$ over $n_t, n_d$
+trials with
+\(\hat H=(h+0.5)/(n_t+1), \hat F=(f+0.5)/(n_d+1)\).
+A within-subject permutation null (label permutations) gives a per-subject
+$p$-value on $d'$. At the group level we test the across-subject
+distribution of $d'$ against zero with a one-sided Wilcoxon signed-rank.
+
+\subsection{Result interpretation}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book2/ch16-sdt/ch16_dprime_forest.png}
+\caption{Per-subject $d'$ in each block. Each row is a subject; blue is
+\texttt{full\_sentence}, red is \texttt{imagined\_sentence}. Most $d'$
+values cluster tightly around zero.}
+\end{figure}
+
+The forest plot makes the headline result obvious: \emph{most subjects
+performed at or very near chance.} Across all $52$ (subject $\times$ block)
+cells the mean accuracy is $0.510$ (range $0.42$--$0.58$), the mean hit rate
+is $0.480$ and the mean false-alarm rate is $0.460$.
+
+At the group level there is still a small but reliable signal in the
+\texttt{full\_sentence} block: mean $d'=0.091$, Wilcoxon one-sided
+$p=0.006$, $t$-test against zero $t=2.61$, $p=0.007$. The
+\texttt{imagined\_sentence} block has mean $d'=0.015$ and is statistically
+indistinguishable from chance ($p=0.38$). Only $1/26$ subjects in the
+imagined block had a permutation-significant $d'$; none did in the full
+block individually. The group-level $d'$ in the full block is therefore
+real but distributed across all subjects rather than concentrated in a few
+strong performers.
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book2/ch16-sdt/ch16_dprime_vs_criterion.png}
+\caption{Sensitivity ($d'$) versus response bias ($C$). Slight conservative
+bias in the imagined block (mean $C=0.094$, $t=2.06$, $p=0.05$); near-neutral
+in the full block.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book2/ch16-sdt/ch16_roc_per_subject.png}
+\caption{Each subject's (FA, hit) point, by block. Points hug the diagonal,
+again indicating near-chance discrimination.}
+\end{figure}
+
+\subsection{Reader takeaway}
+
+Subjects as a group do barely above chance on the \texttt{full\_sentence}
+block, and at chance on the \texttt{imagined\_sentence} block. There is a
+small conservative bias in the imagined block. Any further analysis must
+therefore explain a behavioural signal that is genuinely small.
+
+%==============================================================================
+\section{Chapter 17 -- Internal response consistency}
+%==============================================================================
+
+\subsection{Plain-English intent}
+
+If a subject is at $51\%$ accuracy, they could either be (a) randomly
+guessing or (b) using a stable but ``wrong'' rule. We cannot distinguish
+these from accuracy alone, but we \emph{can} ask whether stimuli that are
+acoustically near each other (under some metric) tend to receive the same
+response from that subject. If yes, the subject is responding consistently
+to acoustic structure even when not matching the labels.
+
+\subsection{Intuitive formula walkthrough}
+
+For each metric $m$ and each block, we build a $k$-nearest-neighbour graph
+on the 150 stimuli. Then for each subject $s$ we compute
+\[
+\textrm{cons}_{s,m} = \frac{1}{N\,k}\sum_{i=1}^{N}\sum_{j\in \mathrm{kNN}(i)}
+\mathbf{1}\bigl[Y_{s,i} = Y_{s,j}\bigr],
+\]
+the average rate at which two acoustically near-neighbour stimuli get the
+same response from subject $s$. A within-subject permutation null is built
+by shuffling that subject's response vector over the 150 stimuli, which
+preserves the marginal response rate. We use $k=10$, $500$ permutations.
+
+\subsection{Result interpretation}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book2/ch17-consistency/ch17_metric_consistency_box.png}
+\caption{Distribution across subjects of $k=10$ neighbour consistency, per
+metric and block. All medians sit near the chance value of $0.5$.}
+\end{figure}
+
+Across both blocks and all five metrics, the per-subject neighbour
+consistency clusters tightly around $0.51$ (range of group means
+$0.506$--$0.519$ across the ten metric--block cells). This is essentially
+indistinguishable from the chance value of $0.50$ that would be expected if
+neighbour structure carried no information about the subject's response
+choices.
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book2/ch17-consistency/ch17_consistency_vs_accuracy.png}
+\caption{Per-subject internal neighbour consistency vs.\ label accuracy,
+faceted by metric. Quadrants from the planning report: top-right
+(consistent and accurate), top-left (consistent but mis-labelled rule),
+bottom-right (accurate but inconsistent), bottom-left (chance). Almost
+every subject lives near the bottom-left intersection.}
+\end{figure}
+
+\subsection{Reader takeaway}
+
+There is no evidence that subjects are using any acoustic-similarity
+neighbourhood -- under any of the five metrics from Book 1 -- as the basis
+for their responses. Combined with chapter 16, this rules out the
+``consistent but unlabelled rule'' explanation: subjects are not just using
+a different stable rule based on these acoustic features, they are giving
+near-random responses with respect to acoustic neighbourhood.
+
+%==============================================================================
+\section{Chapter 18 -- Trial-level logistic prediction}
+%==============================================================================
+
+\subsection{Plain-English intent}
+
+The neighbour-consistency analysis is a coarse $k$-NN summary. A logistic
+regression is the natural smooth, multi-feature version of the same
+question: given each stimulus's relationship to the rest of its block (under
+each acoustic metric) and the trial number, can we predict whether this
+subject will say ``target''?
+
+\subsection{Intuitive formula walkthrough}
+
+For each metric $m$, define the within-block target--minus--distractor
+contrast for stimulus $i$:
+\[
+x_i^{(m)} = \frac{1}{|T_b\setminus\{i\}|}\sum_{j\in T_b\setminus\{i\}} S^{(m)}_{ij}
+            -\frac{1}{|D_b\setminus\{i\}|}\sum_{j\in D_b\setminus\{i\}} S^{(m)}_{ij},
+\]
+where $T_b, D_b$ are the target / distractor sets of stimulus $i$'s block
+and $S^{(m)}$ is the metric-$m$ similarity matrix. Positive $x_i^{(m)}$
+means stimulus $i$ is more similar to the block's targets than to its
+distractors under metric $m$.
+
+For each (subject, block) we fit
+\[
+P(Y_t = 1 \mid x_t, \tau_t) = \sigma\!\bigl(\beta_0 + \sum_m \beta_m\, x_t^{(m)} + \beta_\tau \tau_t\bigr),
+\]
+where $\tau_t$ is the within-block trial index z-scored. We use 5-fold
+stratified CV and report the held-out AUC.
+
+\subsection{Result interpretation}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book2/ch18-logistic/ch18_held_out_auc_box.png}
+\caption{Per-subject 5-fold held-out AUC for several feature sets, by
+block. The $y=0.5$ line is chance.}
+\end{figure}
+
+The mean held-out AUCs sit in the very narrow range $0.50$--$0.53$.
+Crucially, the \texttt{trial\_order\_only} model -- which uses the within-
+block trial index alone -- already achieves $\sim 0.52$ AUC on average,
+matching or beating every single-metric model. The
+\texttt{true\_label\_baseline} model, which uses only the experimenter's
+ground-truth label, gives $0.505$ in the full block and $0.498$ in the
+imagined block. The combined \texttt{all\_metrics} model does not help
+either ($0.509$ full, $0.520$ imagined).
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book2/ch18-logistic/ch18_per_subject_auc_lines.png}
+\caption{Paired per-subject AUC: the experimenter true label (left)
+vs.\ the all-metrics combined model (right). The all-metrics model is at
+best a hair better.}
+\end{figure}
+
+\subsection{Reader takeaway}
+
+The five Book 1 acoustic-similarity metrics offer essentially no predictive
+purchase on individual responses. The fact that a one-feature
+\texttt{trial\_order} model is competitive suggests that what little
+structure exists in the responses is closer to a slow drift in
+liberal/conservative tendency over a block than a stimulus-locked
+acoustic-feature dependence.
+
+%==============================================================================
+\section{Chapter 19 -- Response geometry and RSA}
+%==============================================================================
+
+\subsection{Plain-English intent}
+
+Even if individual subjects are noisy, perhaps \emph{across} subjects there
+is a stable answer to ``which pairs of stimuli get the same response?''. We
+build that answer as a behavioural co-assignment matrix and ask which of our
+several stimulus geometries (label, Pearson, lagged xcorr, envelope, log
+spectrum, MFCC) it most resembles.
+
+\subsection{Intuitive formula walkthrough}
+
+For each block and each pair $(i,j)$ of stimuli,
+\[
+C_{ij} = \frac{1}{|S_{ij}|}\sum_{s\in S_{ij}} \mathbf{1}\bigl[Y_{s,i}=Y_{s,j}\bigr],
+\]
+where $S_{ij}$ is the set of subjects who responded on both stimuli. We treat
+$1-C$ as a behavioural representational dissimilarity matrix (RDM), then:
+
+\begin{itemize}
+\item Cluster on $1-C$ (Agglomerative, average linkage, $k\in\{2,3,4,5\}$)
+      and report ARI / NMI vs.\ the experimenter labels.
+\item RSA: Spearman correlation of the upper triangle of $1-C$ with the
+      upper triangle of each model RDM. Permutation $p$ values come from
+      shuffling stimulus indices on the model side ($2000$ permutations).
+\end{itemize}
+
+\subsection{Result interpretation}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book2/ch19-rsa/ch19_coassignment_heatmap.png}
+\caption{Behavioural co-assignment matrices, with stimuli ordered so that
+all targets precede all distractors (white lines mark the boundary). If
+behaviour tracked the labels, the diagonal blocks would be visibly lighter
+than the off-diagonals; they are not.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book2/ch19-rsa/ch19_rsa_bars.png}
+\caption{RSA Spearman correlations between the behavioural RDM and each
+model RDM, by block, with permutation $p$-values annotated.}
+\end{figure}
+
+The Adjusted Rand Index of behaviour-derived clusters against the
+experimenter labels is $\le 0.01$ in absolute value for every $k$ in both
+blocks. RSA correlations against all six model RDMs (label plus five
+acoustic metrics) cluster around $|r|<0.005$ and are not significant under
+permutation, with one curious exception: in the
+\texttt{imagined\_sentence} block, the behavioural RDM correlates
+\emph{negatively} with the log-spectrum RDM ($r=-0.029$, $p=0.006$),
+i.e.\ stimuli with similar log spectra are slightly \emph{less} likely to
+share responses. The effect is tiny and we flag it only as a hypothesis to
+revisit if more data become available.
+
+\subsection{Reader takeaway}
+
+The geometry of subject responses is essentially flat with respect to all
+six candidate stimulus geometries. Whatever drives the per-subject responses
+is not shared at the group level in any way that respects acoustic
+neighbourhood or experimenter labelling.
+
+%==============================================================================
+\section{Chapter 20 -- Latent response strategies}
+%==============================================================================
+
+\subsection{Plain-English intent}
+
+Maybe subjects \emph{do} use distinct strategies, just at the individual
+level. If so, clustering subjects by their full response vector (across all
+150 stimuli of a block) might reveal e.g.\ a ``yes-saying'' group and a
+``label-tracking'' group. We complement that with clustering on the
+metric-weight profiles fit per subject in chapter 18, in case different
+subjects rely on different acoustic cues even when their overall accuracy
+is the same.
+
+\subsection{Intuitive formula walkthrough}
+
+\textbf{(A) Response-vector clustering.} Build the subject $\times$ stimulus
+matrix $Y$, mean-centre rows, compute pairwise cosine similarity, rescale
+to $[0,1]$ as an affinity, and run spectral clustering for $k\in\{2,3,4\}$.
+
+\textbf{(B) Coefficient-profile clustering.} For each subject fit a
+five-feature logistic regression (one feature per metric, standardised) on
+the subject's trials. Z-score the resulting weight vectors across subjects
+and run $K$-means with $k\in\{2,3,4\}$.
+
+\subsection{Result interpretation}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book2/ch20-strategies/ch20_subject_response_pca.png}
+\caption{Subjects in the first two principal components of their response
+vector, coloured by spectral cluster ($k=2$). The clusters reflect mostly a
+single axis of slightly liberal vs.\ slightly conservative response rate.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book2/ch20-strategies/ch20_cluster_sdt.png}
+\caption{ROC points by subject, coloured by the $k=2$ response-vector
+cluster. Cluster centroids are very close together; clusters do not
+correspond to meaningfully distinct sensitivities.}
+\end{figure}
+
+The $k=2$ response clusters in the \texttt{full\_sentence} block split the
+26 subjects into groups of $11$ and $15$ subjects with mean response rates
+$0.493$ and $0.463$, mean accuracies $0.522$ and $0.508$. In the
+\texttt{imagined\_sentence} block the groups are $10$ vs.\ $16$ subjects
+with mean response rates $0.466$ vs.\ $0.462$ and mean accuracies $0.498$
+vs.\ $0.500$. Translation: the clusters reflect a tiny amount of structure
+in subjects' overall response rate but no qualitative strategy difference.
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book2/ch20-strategies/ch20_subject_coef_heatmap.png}
+\caption{Per-subject metric weights from the logistic regressions (rows
+are subjects, columns are metrics), with rows sorted by the $k=2$ cluster
+on the weights. The visible vertical structure is not a coherent
+``strategy'' but rather noise around zero -- consistent with the chapter
+18 finding that all metric features are near-uninformative.}
+\end{figure}
+
+\subsection{Reader takeaway}
+
+There is no evidence for distinct, acoustically-defined response strategies
+across these 26 subjects. The mild bimodality the clusterer finds is
+explained almost entirely by small differences in overall response rate.
+
+%==============================================================================
+\section{Synthesis}
+%==============================================================================
+
+The five chapters of Book 2 paint a coherent and empirically tight picture:
+
+\begin{itemize}
+\item \textbf{Subjects are at chance overall}, with a small but real
+      group-level $d'$ of $0.09$ in \texttt{full\_sentence}
+      ($p=0.006$) and $d'\approx 0$ in \texttt{imagined\_sentence}.
+\item \textbf{Subjects' responses are not consistent with respect to any
+      Book 1 acoustic-similarity neighbourhood} -- the $k=10$ neighbour
+      consistency sits at $0.51$ for every metric in every block, where
+      $0.50$ is chance.
+\item \textbf{Logistic models built from the Book 1 metrics do not predict
+      subject responses better than chance} (held-out AUC $\le 0.53$ in all
+      cases, including a model that combines all five metrics; a model that
+      uses only the within-block trial index does just as well).
+\item \textbf{The behavioural co-assignment geometry is essentially flat}
+      against all six candidate model geometries (Spearman $|r|<0.03$, mostly
+      $<0.005$; ARI vs.\ labels $|<0.01|$).
+\item \textbf{No distinct response strategies cluster the subjects} --
+      attempted clusterings differ only in overall response rate, with no
+      meaningful sensitivity gap.
+\end{itemize}
+
+A natural reading of these five results together is: \emph{the experiment as
+designed produces near-random responses}, and the small label-related
+signal in the \texttt{full\_sentence} block is distributed broadly across
+subjects rather than carried by a competent subgroup. Because the Book 1
+metrics already showed that the label axis explains less than $0.5\%$ of
+stimulus-pair variance (chapter 8), this is consistent with the
+psychophysical task being above human discrimination threshold for these
+stimuli rather than a failure of any single subject or analysis.
+
+\subsection*{Limitations and what would change the picture}
+
+\begin{itemize}
+\item \emph{No within-subject repetitions.} Direct test--retest reliability
+      is unavailable, so all consistency claims are at the across-stimulus
+      level (chapter 17) or across-subject (chapter 19).
+\item \emph{Modest sample.} $26$ subjects $\times$ $150$ trials per block
+      gives the group test reasonable power for moderate effects (the
+      $d'=0.09$ effect is detectable), but small per-subject AUC differences
+      of $\sim 0.02$ are at the edge of detectability with $5$-fold CV on
+      $150$ trials.
+\item \emph{Acoustic feature space.} We tested five metrics from Book 1.
+      A negative result against \emph{these} five does not preclude richer
+      learned representations (e.g.\ self-supervised speech embeddings)
+      revealing structure, and is a natural next analysis if the question
+      is pursued further.
+\end{itemize}
+
+\end{document}

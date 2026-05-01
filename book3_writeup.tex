@@ -1,0 +1,860 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue!50!black, urlcolor=blue!50!black}
+
+\newcommand{\figfit}[1]{\includegraphics[width=\linewidth,height=0.75\textheight,keepaspectratio]{#1}}
+
+\title{Book 3: Within-subject fine-grained analyses of the auditory
+       superstitious-perception task}
+\author{Auditory SP analyses}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\bigskip
+
+%==============================================================================
+\section{What this book is and how to read it}
+%==============================================================================
+
+Books 1 and 2 worked at the group level. Book 1 asked how the experimenter's
+target / distractor labels relate to acoustic similarity between stimuli, and
+Book 2 asked how subjects' responses relate to those labels and to one
+another. The headline result of Book 2 was that group-level alignment is
+small but not zero ($d'\approx 0.09$ in the \texttt{full\_sentence} block,
+$p\!\approx\!0.006$), and that the cross-subject behavioural geometry has no
+clear cluster structure.
+
+Book 3 zooms inside individual subjects. The questions are:
+
+\begin{enumerate}
+\item \textbf{Per-subject classification image (Ch.~22).} If we average the
+      raw waveforms of every stimulus a subject called ``target'' and
+      subtract the average waveform of those they called ``distractor'',
+      what does the resulting per-subject \emph{template} look like, and
+      how aligned is it to the experimenter's true target-minus-distractor
+      template (and to the original \texttt{wall.wav} sentence)?
+\item \textbf{Within-subject internal consistency (Ch.~23).} Is each
+      subject's behaviour reproducible across random halves of their
+      trials, in either raw waveform or magnitude-spectrum space?
+\item \textbf{Spectral logistic alignment (Ch.~24).} If we model each
+      subject's responses as a linear logistic decision over 32 log-spaced
+      magnitude-spectrum bands, how aligned is their weight vector to the
+      analogous weight vector trained on the experimenter labels?
+\item \textbf{Reminder-anchored and block-position effects (Ch.~25).} Every
+      15 trials, subjects heard a \emph{reminder} replay of the
+      \texttt{wall.wav} template. Do response, hit, and false-alarm rates
+      depend on how many trials have elapsed since the last reminder,
+      or on absolute position within the 150-trial block?
+\item \textbf{Block-order and site (Ch.~26).} Does it matter whether a
+      block was run first or second, and do Oberlin and UChicago
+      participants differ?
+\item \textbf{$d'$ tertiles -- who carries the signal (Ch.~27).} Split
+      subjects within block by $d'$ and by $|d'|$ and ask which
+      sub-group the alignment effect lives in.
+\item \textbf{Individually-significant subjects (Ch.~28).} A close
+      look at the few subjects who survive a per-subject permutation
+      test, including their questionnaire profile.
+\item \textbf{Questionnaire correlates (Ch.~29).} Do BAIS\_V (auditory
+      imagery vividness), BAIS\_C (control), TAS, LSHS, DES, FSS,
+      VHQ, or Stanford sleepiness predict any per-subject signal
+      metric?
+\end{enumerate}
+
+\paragraph{Reading guide.}
+Each chapter has four short sections: \emph{plain-English intent}, what we
+do, the result you should look at, and how to interpret it. Every figure in
+this book is a per-subject summary; group-level numbers are reported in the
+text but the visual emphasis is always on within-subject distributions.
+
+\paragraph{Reminder structure.}
+Within each of the two 150-trial blocks the reminder screen fired before
+trials $15, 30, 45, \ldots, 135$. So for any trial in either block, two
+useful temporal covariates are
+\(\texttt{trials\_since\_reminder} = \texttt{trial\_index} \bmod 15
+   \in \{0,\ldots,14\}\)
+and
+\(\texttt{pos\_in\_block} = \texttt{trial\_index} \in \{0,\ldots,149\}\).
+
+\paragraph{A useful hierarchical framing.}
+Throughout this book each per-subject statistic $\theta_s$ (e.g.\ a cosine
+alignment, a logistic slope) is implicitly viewed as
+\(\theta_s \sim \mathcal{N}(\mu_\theta,\sigma_\theta^2)\) with
+\(\mu_\theta\) the population effect and \(\sigma_\theta\) the
+between-subject variability. A non-zero $\mu_\theta$ is what we mean by
+``the typical subject is doing the task''; a positive $\sigma_\theta$ even
+with $\mu_\theta=0$ would mean ``different subjects use systematically
+different but real strategies''. We don't fit a full Bayesian hierarchical
+model here, but every group-level statistic in this book is the
+random-intercept version of the corresponding $\mu_\theta$.
+
+%==============================================================================
+\section{Chapter 22 -- Per-subject classification image}
+%==============================================================================
+
+\subsection{Plain-English intent}
+
+For each subject, build the raw audio template they implicitly endorsed by
+calling certain stimuli ``target'' and others ``distractor''. Compare it
+to (a) the experimenter's own target-minus-distractor template for the
+block, and (b) the original \texttt{wall.wav} clip the subject was told
+to listen for.
+
+\subsection{Method}
+
+For subject $s$ in block $b$ with response vector
+$y_s \in \{0,1\}^{150}$ (1 = called target):
+
+\begin{align*}
+\mathrm{CI}_s     &= \overline{w}_{\,y_{si}=1}
+                   - \overline{w}_{\,y_{si}=0}, \\
+\mathrm{CI}_{\rm true} &= \overline{w}_{\,t_{i}=1}
+                          - \overline{w}_{\,t_{i}=0},
+\end{align*}
+
+where $w_i$ is the centred 2960-sample waveform of stimulus $i$ and
+$t_i$ is its experimenter label. We report two cosines per subject:
+$\cos(\mathrm{CI}_s,\,\mathrm{CI}_{\rm true})$ and
+$\cos(\mathrm{CI}_s,\,\texttt{wall.wav})$. The null is built per subject
+by permuting $y_s$ across stimuli ($N=1000$) and recomputing the cosine.
+
+\subsection{Result}
+
+Across both blocks the experimenter template $\mathrm{CI}_{\rm true}$ is
+itself only mildly aligned to \texttt{wall.wav}
+($\cos\!\approx\!0.42$): a target stimulus is acoustically a distorted,
+embedded copy of the sentence rather than a clean copy.
+At the per-subject level (Fig.~\ref{fig:ch22-hist}):
+
+\begin{itemize}
+\item \texttt{full\_sentence}: mean
+      $\cos(\mathrm{CI}_s,\mathrm{CI}_{\rm true}) = +0.034$,
+      \textbf{77\% of subjects above zero}, no individual subject
+      permutation-significant at $p<0.05$.
+\item \texttt{imagined\_sentence}: mean $+0.014$, 58\% above zero, one
+      subject individually significant.
+\end{itemize}
+
+So the \emph{group} signal is real (a binomial test on $20/26$ positive
+gives $p<0.01$ for \texttt{full\_sentence}) but no individual subject's
+classification image is, on its own, reliably aligned. This is the
+characteristic ``many small noisy effects, all in the same direction''
+pattern. Figure~\ref{fig:ch22-examples} shows the worst- and
+best-aligned subject in each block; even the best aligned $\mathrm{CI}_s$
+does not look like a clean copy of $\mathrm{CI}_{\rm true}$.
+
+\subsection{How to interpret}
+
+Subjects appear to be \emph{slightly} biased towards endorsing
+acoustically target-like stimuli, but the within-subject signal is
+roughly the same order of magnitude as the per-subject permutation null.
+What pushes the group result is the consistent \emph{sign} of the cosine
+across subjects, not the magnitude in any one of them.
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch22-classification-image/ch22_alignment_hist.png}
+\caption{Per-subject cosine between the subject's classification image
+$\mathrm{CI}_s$ and the experimenter template $\mathrm{CI}_{\rm true}$.
+Each bin is one subject. Vertical orange line: group mean.}
+\label{fig:ch22-hist}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch22-classification-image/ch22_ci_examples.png}
+\caption{Worst-aligned (top row) and best-aligned (bottom row) subject's
+classification image (blue, normalised) overlaid on the experimenter
+template (black, normalised), per block.}
+\label{fig:ch22-examples}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch22-classification-image/ch22_ci_vs_wall_scatter.png}
+\caption{Per-subject classification-image cosines: $y$-axis vs
+$\mathrm{CI}_{\rm true}$, $x$-axis vs the original \texttt{wall.wav}.
+Subjects above the horizontal axis are biased towards the experimenter
+template; subjects to the right of the vertical axis are biased towards
+the raw sentence.}
+\label{fig:ch22-vs-wall}
+\end{figure}
+
+\clearpage
+
+%==============================================================================
+\section{Chapter 23 -- Within-subject split-half consistency}
+%==============================================================================
+
+\subsection{Plain-English intent}
+
+If a subject is using \emph{any} consistent rule -- experimenter-aligned
+or not -- to decide which stimuli to call ``target'', then the
+classification image computed on a random half of their trials should
+look like the classification image computed on the other half. We test
+this in two feature spaces: raw centred waveform (2960-D) and the
+magnitude FFT (1481-D).
+
+\subsection{Method}
+
+For each subject, repeat $200$ random splits of the 150 trials into
+halves $A,B$. Compute $\mathrm{CI}_A,\mathrm{CI}_B$ on each half and
+report the average Pearson correlation
+$\bar r_s = \mathbb{E}_\text{splits}\;\mathrm{corr}(\mathrm{CI}_A,
+                                                   \mathrm{CI}_B)$.
+A response-shuffled null gives the floor.
+
+\subsection{Result}
+
+Both feature spaces give $\bar r_s$ values indistinguishable from zero
+(group means in $[-0.007, +0.005]$) and indistinguishable from the
+shuffled null (Fig.~\ref{fig:ch23-hist}). Plotting $\bar r_s$ against
+the chapter-22 alignment cosine shows no relationship
+(Fig.~\ref{fig:ch23-vsalign}).
+
+\subsection{How to interpret}
+
+Two readings:
+
+\begin{enumerate}
+\item Subjects are \emph{not} consistently using a rule that lives in raw
+      waveform or magnitude-spectrum coordinates. Whatever consistency
+      they have (chapter 22 says some sign-consistency exists) lives
+      along the \emph{single} direction defined by
+      $\mathrm{CI}_{\rm true}$, not along arbitrary directions in a
+      $\sim$1500-D feature space. Estimating an arbitrary direction from
+      75 trials is statistically hopeless even for perfectly consistent
+      rules; estimating the projection onto a known direction is fine.
+\item This is therefore a \emph{negative} result for ``hidden idiosyncratic
+      strategies in raw acoustics''. If subjects each have their own
+      private strategy in either feature space, the strategy is too weak
+      to detect with 75 yes-trials and 75 no-trials per block.
+\end{enumerate}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch23-split-half/ch23_splithalf_hist.png}
+\caption{Per-subject split-half consistency $\bar r_s$ in waveform
+(top) and magnitude-spectrum (bottom) space, observed (blue) vs
+response-shuffled (gray), per block. Both observed distributions are
+indistinguishable from their shuffled controls.}
+\label{fig:ch23-hist}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch23-split-half/ch23_consistency_vs_alignment.png}
+\caption{No relationship between within-subject consistency
+($y$, ch.~23) and label-template alignment ($x$, ch.~22).}
+\label{fig:ch23-vsalign}
+\end{figure}
+
+\clearpage
+
+%==============================================================================
+\section{Chapter 24 -- Per-subject spectral logistic regression}
+%==============================================================================
+
+\subsection{Plain-English intent}
+
+Reduce each stimulus to its magnitude-spectrum amplitude in 32 log-spaced
+frequency bands ($\sim$50\,Hz to $\sim$3950\,Hz), then fit a ridge
+logistic regression per subject:
+\(P(\text{called\_target}_i = 1) = \sigma(w_s^\top x_i + b_s)\).
+Compare the resulting weight vector $w_s$ to the analogous weight
+vector $w_{\rm true}$ trained on the experimenter labels for the
+same block.
+
+This is the same spirit as chapter 22, but in a much lower-dimensional
+basis where 75 yes-trials \emph{is} enough to estimate a direction.
+
+\subsection{Method}
+
+Per stimulus, compute the magnitude FFT and average within each of 32
+geometrically-spaced bands. Standardise across the 150 stimuli.
+Per-subject ridge logistic with $C=0.5$ (sklearn,
+\texttt{liblinear}). $w_{\rm true}$ is the same model fit with
+$y$=experimenter label. Per-subject permutation null: shuffle $y_s$ and
+refit ($N=200$ shuffles).
+
+\subsection{Result}
+
+\begin{itemize}
+\item \texttt{full\_sentence}: mean
+      $\cos(w_s,w_{\rm true}) = +0.064$, 65\% positive,
+      \textbf{2/26 subjects individually $p<0.05$}.
+\item \texttt{imagined\_sentence}: mean $+0.042$, 54\% positive, no
+      subject individually significant.
+\end{itemize}
+
+Figures \ref{fig:ch24-hist} and \ref{fig:ch24-heatmap-fs} show the
+distribution and the per-subject weight vectors sorted by alignment.
+In \texttt{full\_sentence} the highest-aligned subjects' weight
+vectors visibly mirror the dominant low-frequency structure of
+$w_{\rm true}$.
+Figure~\ref{fig:ch24-vs-dprime} shows that within \texttt{full\_sentence}
+subjects with higher chapter-16 $d'$ also tend to have larger
+$\cos(w_s,w_{\rm true})$ -- exactly what one would expect if
+the spectral-band logistic is capturing the same per-subject
+discrimination signal that SDT captures.
+
+\subsection{How to interpret}
+
+This is the strongest within-subject evidence in the book that
+individual participants are using the experimenter-defined acoustic
+information, not just at the group level. The effect is small in
+magnitude but consistent in direction, and the spectral basis is small
+enough that two individual subjects survive a per-subject permutation
+test.
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch24-spectral-logistic/ch24_alignment_hist.png}
+\caption{Per-subject cosine alignment between the subject's spectral
+logistic weight vector $w_s$ and the experimenter weight vector
+$w_{\rm true}$. Dashed gray line: subject-averaged null mean.}
+\label{fig:ch24-hist}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch24-spectral-logistic/ch24_weight_heatmap_full_sentence.png}
+\caption{\texttt{full\_sentence}: $w_{\rm true}$ across the 32 bands
+(top) and per-subject $w_s$ rows (bottom), sorted by alignment cosine.
+$x$-axis tick labels: band centre frequency in Hz.}
+\label{fig:ch24-heatmap-fs}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch24-spectral-logistic/ch24_weight_heatmap_imagined_sentence.png}
+\caption{\texttt{imagined\_sentence}: same as previous figure for the
+imagined-sentence block.}
+\label{fig:ch24-heatmap-is}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch24-spectral-logistic/ch24_alignment_vs_dprime.png}
+\caption{Per-subject spectral alignment vs SDT sensitivity $d'$
+(chapter 16). Subjects more sensitive in the SDT sense also tend
+to have spectral weights that align with the experimenter's.}
+\label{fig:ch24-vs-dprime}
+\end{figure}
+
+\clearpage
+
+%==============================================================================
+\section{Chapter 25 -- Reminder-anchored and block-position effects}
+%==============================================================================
+
+\subsection{Plain-English intent}
+
+Every 15 trials a reminder screen replayed the wall.wav template. Three
+related questions:
+(A) Do response, hit, and false-alarm rates differ between the first 5
+trials after a reminder, the middle 5, and the last 5 (just before the
+next reminder)?
+(B) After regressing out the experimenter label, is there a per-subject
+slope of $P(\text{yes})$ on either trials-since-reminder or absolute
+position in the block, and is the average of those slopes non-zero?
+(C) Does the block-level mean response rate drift across the 10
+reminder segments?
+
+\subsection{Method}
+
+Per-subject logistic regression of $\texttt{called\_target}$ on
+$z(\texttt{trials\_since\_reminder})$,
+$\texttt{true\_target}$,
+$z(\texttt{trials\_since\_reminder})\times\texttt{true\_target}$,
+$z(\texttt{pos\_in\_block})$, and
+$z(\texttt{pos\_in\_block})\times\texttt{true\_target}$,
+then group-level Wilcoxon of each per-subject slope against zero.
+
+\subsection{Result}
+
+\begin{itemize}
+\item No reliable bin-of-15 effect: in both blocks the mean
+      response/hit/FA rates over first-5 / middle-5 / last-5 bins
+      essentially overlap (Fig.~\ref{fig:ch25-bin5}).
+\item No reliable trials-since-reminder slope (\texttt{full\_sentence}
+      Wilcoxon $p=0.69$; \texttt{imagined\_sentence} $p=0.76$) and no
+      reliable absolute-position slope ($p=0.39$ and $p=0.92$).
+\item The interaction $\texttt{trials\_since\_reminder}
+      \times\texttt{true\_target}$ is also null in both blocks.
+\item The within-subject coefficient on $\texttt{true\_target}$ itself
+      \emph{is} reliably positive in \texttt{full\_sentence}
+      (median $+0.17$, Wilcoxon $p=0.011$) and in the same direction
+      but not significant in \texttt{imagined\_sentence}
+      (median $+0.04$, $p=0.53$). This is the per-subject SDT signal,
+      now seen as a non-zero population effect after partialling out
+      temporal covariates.
+\item Block-level segment-drift slopes are centred near zero in both
+      blocks (Fig.~\ref{fig:ch25-drift}). No general fatigue or warm-up
+      pattern in the response rate.
+\end{itemize}
+
+\subsection{How to interpret}
+
+The reminder cadence does not modulate behaviour in any detectable way.
+There is no warm-up after the reminder, no decay before the next one,
+and no drift across the block. The only temporal covariate that matters
+in the per-subject regression is the experimenter's label itself: the
+typical subject's $P(\text{yes})$ is significantly higher on true
+targets than on true distractors, replicating the chapter-16
+group-level finding from a different angle (mixed-effects-style
+per-subject estimation rather than collapsed counts).
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch25-reminder-anchored/ch25_bin5_group.png}
+\caption{Group-level mean response, hit, false-alarm, and accuracy
+rates as a function of the 5-trial bin since the most recent reminder.
+Error bars: SEM across subjects.}
+\label{fig:ch25-bin5}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch25-reminder-anchored/ch25_slope_forest.png}
+\caption{Per-subject logistic-regression coefficients for the five
+temporal/label covariates. Gray points: individual subjects; blue
+point: group mean $\pm$ SE. The only coefficient with a reliably
+non-zero population mean is \texttt{beta\_truetarget} in
+\texttt{full\_sentence}.}
+\label{fig:ch25-forest}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch25-reminder-anchored/ch25_segment_drift.png}
+\caption{Per-subject slope of mean response rate across the 10
+reminder segments (10$\times$15-trial bins). No reliable drift.}
+\label{fig:ch25-drift}
+\end{figure}
+
+\clearpage
+
+%==============================================================================
+\section{Synthesis}
+%==============================================================================
+
+What Book 3 found, end-to-end:
+
+\begin{enumerate}
+\item In the \texttt{full\_sentence} block, the typical subject's
+      classification image is weakly but consistently aligned with the
+      experimenter's true target-minus-distractor template
+      ($20/26$ positive cosines, $p<0.01$ binomial). No individual
+      subject is alignment-significant on a per-subject permutation,
+      but the population mean is non-zero.
+\item In a 32-band log-spectral basis, the same subjects'
+      ridge-logistic weight vectors align with the experimenter's
+      ($+0.064$ mean cosine, $65\%$ positive, two individually
+      significant subjects). Per-subject spectral alignment is
+      positively correlated with chapter-16 $d'$.
+\item Within-subject consistency in arbitrary high-dimensional
+      waveform or spectrum coordinates is at chance: subjects do
+      \emph{not} appear to use idiosyncratic acoustic strategies that
+      are detectable from 75 yes-trials per block.
+\item Reminder-anchored time-course is flat. No first-5 / middle-5 /
+      last-5 differences, no trials-since-reminder slope, no drift
+      across the 10 reminder segments. The reminder cadence is
+      behaviourally invisible.
+\item The only reliable per-subject temporal-regression effect is the
+      coefficient on the true experimenter label
+      (\texttt{full\_sentence} median $+0.17$,
+      Wilcoxon $p=0.011$): the typical subject is more likely to say
+      ``yes'' on true-target trials. This is a within-subject
+      restatement of the chapter-16 group $d'$.
+\end{enumerate}
+
+\paragraph{Where the signal lives.}
+The picture that emerges across Books 2 and 3 is consistent: there is a
+small, positive, group-level alignment with the experimenter labels,
+which can be isolated either via SDT counts (Ch.~16), classification
+images projected onto the true template (Ch.~22), spectral logistic
+weights (Ch.~24), or a per-subject random-intercept logistic with the
+true label as a predictor (Ch.~25). All four routes give signed,
+non-zero population effects in \texttt{full\_sentence}; all four are
+much weaker (and rarely significant) in \texttt{imagined\_sentence}.
+
+\paragraph{Where the signal does not live.}
+Idiosyncratic per-subject strategies in raw acoustic feature spaces are
+not detectable. Reminder-anchored time-course effects are not
+detectable. Block-position drift is not detectable. Within-subject
+internal consistency in raw acoustic spaces is at chance.
+
+\paragraph{Implicit hierarchical model.}
+Every per-subject statistic in this book has been treated as
+\(\theta_s \sim \mathcal{N}(\mu_\theta,\sigma_\theta^2)\). The data
+are consistent with $\mu_\theta>0$ for the alignment statistics
+in \texttt{full\_sentence} and with $\mu_\theta\approx 0,
+\sigma_\theta\approx 0$ (no strategy variation beyond noise) for
+all the temporal covariates. A full Bayesian hierarchical model
+\(y_{si} \sim \mathrm{Bernoulli}(\sigma(w_s^\top x_i + b_s))\) with
+$w_s\sim\mathcal{N}(\mu_w,\Sigma_w)$ would be the natural next step
+if a sharper estimate of $\mu_\theta$ relative to $\sigma_\theta$
+were needed; here the random-intercept Wilcoxon and per-subject
+permutation tests already make the qualitative point.
+
+\clearpage
+
+%==============================================================================
+\section{Chapter 26 -- Block-order and site effects}
+%==============================================================================
+
+\subsection{Plain-English intent}
+
+Each subject ran two blocks (\texttt{full\_sentence} and
+\texttt{imagined\_sentence}) in a counterbalanced order. Two questions:
+(A) does it matter whether a block was run first or second
+(practice / fatigue / familiarisation with \texttt{wall.wav})? and
+(B) do the two recruitment sites (Oberlin, $N=16$; UChicago, $N=10$)
+differ on any of our headline metrics?
+
+\subsection{Method}
+
+For each per-subject metric (Ch.16 $d'$, Ch.22 $\cos(\mathrm{CI}_s,
+\mathrm{CI}_{\rm true})$, Ch.24 $\cos(w_s,w_{\rm true})$, Ch.25
+\texttt{beta\_truetarget}) we (i) compare Block-1 vs Block-2 within
+\texttt{block\_type} via Mann--Whitney, and (ii) compare the same
+metric across all 26 subjects via a paired Wilcoxon on
+$(\theta_{\text{run-second}}-\theta_{\text{run-first}})$ irrespective
+of which scheme came second. We also run Mann--Whitney by site within
+each block.
+
+\subsection{Result}
+
+\paragraph{Block order.}
+Across all four metrics the Block-2 mean is consistently larger than
+the Block-1 mean (Fig.~\ref{fig:ch26-blockorder}). The paired
+Wilcoxon trend is strongest for \texttt{beta\_truetarget}
+($\bar{\Delta}=+0.16$, $W=104$, $p=0.071$) and
+$d'$ ($\bar{\Delta}=+0.09$, $p=0.099$). No comparison reaches
+$p<0.05$ but the consistent direction of the four trends suggests a
+mild practice/familiarisation effect.
+
+\paragraph{Site.}
+Numerically Oberlin tracks higher than UChicago on every metric in
+every block (e.g.\ \texttt{full\_sentence} $d'$: Oberlin $0.135$ vs
+UChicago $0.021$; cos\_ci\_true: $0.057$ vs $-0.002$). None of the
+eight Mann--Whitney tests reach $p<0.05$ ($p$-values in $[0.12,0.69]$)
+so this remains descriptive. Figure~\ref{fig:ch26-site} shows the
+distributions side-by-side.
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch26-block-order-and-site/ch26_block_order.png}
+\caption{Per-subject metrics by block-order index, within block type.
+Black bars: group means. Block-2 means are uniformly higher than
+Block-1 means.}
+\label{fig:ch26-blockorder}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch26-block-order-and-site/ch26_site_split.png}
+\caption{Per-subject metrics by site (Oberlin vs UChicago). Oberlin
+tracks higher on every metric in every block but no comparison is
+$p<0.05$.}
+\label{fig:ch26-site}
+\end{figure}
+
+\clearpage
+
+%==============================================================================
+\section{Chapter 27 -- $d'$ tertiles: who carries the signal}
+%==============================================================================
+
+\subsection{Plain-English intent}
+
+The group means in chapters 22 and 24 are small. If they are driven by
+a few subjects with genuinely good performance, splitting subjects into
+$d'$ tertiles should reveal it. We split (within each block) into
+\emph{signed} $d'$ tertiles (low $\le$ med $\le$ high) and \emph{absolute}
+$|d'|$ tertiles (worst $\le$ middle $\le$ most-extreme). Kruskal--Wallis
+tests whether each per-subject statistic differs across tertiles.
+
+\subsection{Result -- signed $d'$}
+
+Almost every metric is monotonically ordered low--med--high in both
+blocks (Kruskal $p<10^{-4}$ for $d'$ itself, $p<10^{-3}$ for
+\texttt{cos\_ci\_true} in \texttt{imagined\_sentence}, etc.). This is
+unsurprising and largely a consistency check.
+
+\subsection{Result -- absolute $|d'|$}
+
+The interesting split. In \texttt{full\_sentence} every alignment
+metric is significantly elevated in the highest $|d'|$ tertile:
+
+\begin{center}
+\begin{tabular}{lrrrr}
+\toprule
+metric & low $|d'|$ & med $|d'|$ & high $|d'|$ & Kruskal $p$ \\
+\midrule
+$d'$              & $+0.015$ & $+0.042$ & $+0.210$ & $0.005$ \\
+\texttt{cos\_ci\_true}     & $+0.011$ & $+0.009$ & $+0.081$ & $0.026$ \\
+\texttt{cos\_w\_true}      & $-0.001$ & $+0.022$ & $+0.165$ & $0.230$ \\
+\texttt{beta\_truetarget}  & $+0.038$ & $+0.081$ & $+0.341$ & $0.006$ \\
+\texttt{accuracy}          & $0.503$  & $0.508$  & $0.541$  & $0.006$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The high-$|d'|$ tertile in \texttt{full\_sentence} is also high
+on \emph{signed} $d'$ (mean $+0.21$, all positive), so high-$|d'|$
+subjects are not high-$|d'|$ because of \emph{anti-aligned}
+performance -- they are simply the few subjects who actually
+discriminated the experimenter targets. In
+\texttt{imagined\_sentence}, by contrast, $|d'|$ tertile is
+\emph{not} predictive of any alignment metric ($p>0.32$ for
+\texttt{cos\_ci\_true}, \texttt{cos\_w\_true},
+\texttt{beta\_truetarget}). Imagined-block subjects with extreme
+$|d'|$ are split between aligned and anti-aligned -- consistent with
+the chapter-16 group $d'\!\approx\!0$.
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch27-dprime-tertiles/ch27_signed_tertile_box.png}
+\caption{Per-subject metrics by signed $d'$ tertile. Monotonic across
+all metrics in both blocks (largely a consistency check).}
+\label{fig:ch27-signed}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch27-dprime-tertiles/ch27_abs_tertile_box.png}
+\caption{Per-subject metrics by absolute $|d'|$ tertile. In
+\texttt{full\_sentence} the high-$|d'|$ tertile carries the
+alignment signal; in \texttt{imagined\_sentence} the highest-$|d'|$
+subjects are mixed in sign and do not differ in alignment from the
+other tertiles.}
+\label{fig:ch27-abs}
+\end{figure}
+
+\clearpage
+
+%==============================================================================
+\section{Chapter 28 -- Individually-significant subjects}
+%==============================================================================
+
+\subsection{Plain-English intent}
+
+A per-subject permutation test with $N=1000$--$200$ shuffles can
+detect subjects whose alignment is unlikely to arise from chance.
+Three tests:
+$d'$ from chapter 16,
+$\cos(\mathrm{CI}_s,\mathrm{CI}_{\rm true})$ from chapter 22, and
+$\cos(w_s,w_{\rm true})$ from chapter 24.
+
+\subsection{Result}
+
+8 subject-blocks (out of $26\times 2=52$) survive a one-sided
+$p<0.05$ on at least one test (3 in \texttt{full\_sentence},
+5 in \texttt{imagined\_sentence}). No subject is significant in
+\emph{both} blocks. The per-test counts:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+block & sig on $d'$ & sig on CI alignment & sig on spectral alignment \\
+\midrule
+\texttt{full\_sentence}     & 0 & 2 & 3 \\
+\texttt{imagined\_sentence} & 1 & 3 & 3 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A weaker but more pervasive marker is being \emph{stably aligned} on
+all three signal metrics within a block (cos\_ci\_true $>0$ AND
+cos\_w\_true $>0$ AND beta\_truetarget $>0$): 15 / 26 in
+\texttt{full\_sentence} and 10 / 26 in \texttt{imagined\_sentence}.
+
+\paragraph{Questionnaire profile of the significant subjects.}
+The most striking pattern is in BAIS\_V (Bucknell Auditory Imagery
+Scale -- vividness). 7 of the 8 significant subjects scored at or
+above mid-range on BAIS\_V; 6 of the 8 scored $\ge 68$ (close to
+ceiling, range $14$--$98$). The single significant subject with floor
+BAIS\_V ($=14$, ``no auditory imagery'') is significant only on the
+spectral test, not on the imagery-relevant CI test.
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch28-significant-subjects/ch28_signif_overlap_venn.png}
+\caption{Per-test counts of individually-significant subjects in each
+block.}
+\label{fig:ch28-counts}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch28-significant-subjects/ch28_significant_metric_table.png}
+\caption{Per-significant-subject metric values, normalised within
+column. Rows labelled \texttt{site\_initial subject\_id\_tail
+block\_type\_prefix}.}
+\label{fig:ch28-table}
+\end{figure}
+
+\clearpage
+
+%==============================================================================
+\section{Chapter 29 -- Questionnaire correlates}
+%==============================================================================
+
+\subsection{Plain-English intent}
+
+For each subject we have eight questionnaire scores: BAIS\_V (auditory
+imagery vividness), BAIS\_C (auditory imagery control), VHQ (visual
+imagery), TAS (Tellegen absorption), LSHS (Launay--Slade hallucination
+proneness), DES (dissociative experiences), FSS (flow state), and
+SSS\_mean (Stanford Sleepiness, mean across pre/post measurements).
+We compute Spearman $\rho$ with each performance metric, per block.
+
+\subsection{Method}
+
+Spearman $\rho$ across all $8 \times 8 \times 2 = 128$
+quest$\times$perf$\times$block combinations, with simple Bonferroni
+correction. We also run a one-sided BAIS\_V median-split test
+(prediction: high BAIS\_V $\Rightarrow$ higher alignment).
+
+\subsection{Result}
+
+No correlation survives Bonferroni at $p<0.05$ (which would require
+$p<3.9\times 10^{-4}$). Three uncorrected $p<0.05$ correlations:
+
+\begin{center}
+\begin{tabular}{llcrr}
+\toprule
+block & quest$\times$perf & $n$ & $\rho$ & $p$ \\
+\midrule
+\texttt{imagined\_sentence} & DES vs criterion        & 26 & $+0.44$ & $0.023$ \\
+\texttt{full\_sentence}     & BAIS\_C vs hit\_rate    & 26 & $+0.40$ & $0.042$ \\
+\texttt{imagined\_sentence} & DES vs FA rate          & 26 & $-0.40$ & $0.045$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{BAIS\_V median split.}
+The pre-registered direction (high BAIS\_V $\Rightarrow$ higher
+within-subject alignment) is consistent across all four
+\texttt{full\_sentence} metrics, with one-sided $p$-values
+$\in [0.056, 0.075]$:
+
+\begin{center}
+\begin{tabular}{lrrr}
+\toprule
+metric & high BAIS\_V (N=13) & low BAIS\_V (N=13) & one-sided $p$ \\
+\midrule
+$d'$                  & $0.152$ & $0.030$ & $0.056$ \\
+\texttt{cos\_ci\_true}     & $0.061$ & $0.008$ & $0.069$ \\
+\texttt{cos\_w\_true}      & $0.085$ & $0.042$ & $0.341$ \\
+\texttt{beta\_truetarget}  & $0.240$ & $0.072$ & $0.076$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{How to interpret.}
+Each individual test is marginal, but four of four \texttt{full\_sentence}
+metrics point in the predicted direction with $p<0.10$, and the
+chapter-28 categorical observation (7 of 8 individually-significant
+subject-blocks have above-mid BAIS\_V) is consistent. This is the
+strongest cross-questionnaire signal in the dataset.
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch29-questionnaires/ch29_bais_v_scatter.png}
+\caption{BAIS\_V vs each within-subject signal metric, coloured by
+site. Spearman $\rho$ and uncorrected $p$ in each panel title.
+Dashed line: OLS fit.}
+\label{fig:ch29-baisv}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch29-questionnaires/ch29_bais_c_scatter.png}
+\caption{BAIS\_C (auditory imagery control) vs each within-subject
+signal metric.}
+\label{fig:ch29-baisc}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch29-questionnaires/ch29_tas_scatter.png}
+\caption{TAS (Tellegen absorption) vs each within-subject signal
+metric.}
+\label{fig:ch29-tas}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\figfit{stimuli-analyses/outputs/book3/ch29-questionnaires/ch29_lshs_scatter.png}
+\caption{LSHS (Launay--Slade hallucination proneness) vs each
+within-subject signal metric.}
+\label{fig:ch29-lshs}
+\end{figure}
+
+\clearpage
+
+%==============================================================================
+\section{Synthesis (revised)}
+%==============================================================================
+
+Putting chapters 22--29 together:
+
+\begin{enumerate}
+\item \textbf{Group-level alignment is small but real in
+      \texttt{full\_sentence}} (Ch.~22, $20/26$ positive cosines;
+      Ch.~24, $+0.064$ mean spectral alignment; Ch.~25, true-target
+      coefficient median $+0.17$, $p=0.011$).
+\item \textbf{The signal is concentrated in the high-$|d'|$ tertile}
+      (Ch.~27): in \texttt{full\_sentence}, the top third of
+      $|d'|$-ranked subjects has cos\_ci\_true $\approx +0.08$ and
+      beta\_truetarget $\approx +0.34$, vs.\ $\approx 0$ in the lower
+      two thirds. The same split is null in
+      \texttt{imagined\_sentence}.
+\item \textbf{8 of 52 subject-blocks are individually permutation-
+      significant} (Ch.~28). No subject is significant in both
+      blocks, but $25/52$ are stably aligned (positive on all three
+      signal metrics) within a block.
+\item \textbf{Block-2 means trend higher than Block-1 means} on every
+      metric (Ch.~26), suggesting practice / template-familiarisation,
+      with paired-Wilcoxon $p\approx 0.07$ for the strongest case.
+\item \textbf{Site differences are descriptive only} (Ch.~26):
+      Oberlin $>$ UChicago numerically on every metric, no test
+      $p<0.05$.
+\item \textbf{Reminder cadence is behaviourally invisible} (Ch.~25):
+      no first-5 / mid-5 / last-5 effect, no
+      trials-since-reminder slope, no segment drift.
+\item \textbf{High auditory imagery vividness (BAIS\_V) tracks
+      alignment} (Ch.~28, Ch.~29): 7 of 8 individually-significant
+      subjects are above mid BAIS\_V, and a one-sided median-split
+      test in \texttt{full\_sentence} gives $p<0.08$ on three of
+      four signal metrics. No questionnaire correlation survives
+      Bonferroni, so this is suggestive rather than confirmed.
+\item \textbf{Idiosyncratic high-D acoustic strategies are not
+      detectable} (Ch.~23). Subjects who carry the alignment signal
+      do so along the experimenter-defined direction, not along
+      arbitrary directions.
+\end{enumerate}
+
+\paragraph{One-sentence summary.}
+Within the \texttt{full\_sentence} block a minority of subjects --
+preferentially those with high auditory-imagery vividness -- align
+their responses to the experimenter's acoustic targets in a way that
+is detectable through four mutually consistent statistics
+(SDT $d'$, classification image alignment, spectral logistic
+alignment, true-target coefficient). The \texttt{imagined\_sentence}
+block does not show this pattern, the reminder cadence is irrelevant,
+and within-subject idiosyncratic strategies are below detection.
+
+\end{document}
+

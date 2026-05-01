@@ -130,7 +130,7 @@ def chapter_6_cohesion_by_rank(ranked_df, output_path):
     )
     ax.set_xlabel("Top-N Subset Size")
     ax.set_ylabel("Mean Pairwise Pearson r")
-    ax.set_title(f"Target Cohesion by Rank (Chapter 6) [Step Size = {STEP_SIZE}]")
+    ax.set_title(f"Target Cohesion by Rank [Step Size = {STEP_SIZE}]")
     ax.grid(alpha = 0.3)
     fig.tight_layout()
     fig.savefig(output_path / "ch6_cohesion_curve.png", dpi = 200)

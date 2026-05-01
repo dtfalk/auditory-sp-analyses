@@ -1,0 +1,47 @@
+\contentsline {section}{Executive summary}{2}{section*.2}%
+\contentsline {section}{How to read this book}{2}{section*.3}%
+\contentsline {section}{\numberline {1}Foundations (Part I)}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Stimulus inventory}{3}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Preprocessing}{3}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Descriptive properties}{3}{subsection.1.3}%
+\contentsline {section}{\numberline {2}Pearson-centered analyses (Part II)}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Chapter 4: Template-correlation distribution}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Chapter 5: Pairwise Pearson structure}{4}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Chapter 6: Target cohesion vs.\ selection rank}{5}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Chapter 7: Template alignment vs.\ pairwise cohesion}{6}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Chapter 8: Pearson-based geometry of the full set}{7}{subsection.2.5}%
+\contentsline {paragraph}{Classical MDS.}{7}{section*.8}%
+\contentsline {paragraph}{Linear PCA on raw waveforms}{7}{section*.9}%
+\contentsline {paragraph}{$t$-SNE}{7}{section*.10}%
+\contentsline {paragraph}{Clustering}{7}{section*.11}%
+\contentsline {paragraph}{Label axis.}{7}{section*.12}%
+\contentsline {subsection}{\numberline {2.6}Chapter 9: Template projection and residual structure}{8}{subsection.2.6}%
+\contentsline {subsubsection}{\numberline {2.6.1}Decomposition}{8}{subsubsection.2.6.1}%
+\contentsline {subsubsection}{\numberline {2.6.2}Mean contributions}{9}{subsubsection.2.6.2}%
+\contentsline {subsubsection}{\numberline {2.6.3}Per-sample contributions (Chapter 9b)}{9}{subsubsection.2.6.3}%
+\contentsline {subsection}{\numberline {2.7}Chapter 10: Null models for Pearson structure}{10}{subsection.2.7}%
+\contentsline {paragraph}{White-noise null.}{10}{section*.18}%
+\contentsline {paragraph}{Label-permutation null.}{10}{section*.19}%
+\contentsline {section}{\numberline {3}Non-Pearson metric analyses (Part III)}{11}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Chapter 11: Choosing alternative metrics}{11}{subsection.3.1}%
+\contentsline {paragraph}{1. Pearson raw}{11}{section*.22}%
+\contentsline {paragraph}{2. Lagged cross-correlation, $\pm 200\,\mathrm {ms}$.}{11}{section*.23}%
+\contentsline {paragraph}{3. Envelope correlation.}{11}{section*.24}%
+\contentsline {paragraph}{4. Log-spectrum correlation.}{11}{section*.25}%
+\contentsline {paragraph}{5. MFCC cosine.}{11}{section*.26}%
+\contentsline {subsection}{\numberline {3.2}Chapter 12: Label-aware separation under each metric}{12}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Chapter 13: Label-blind clustering under each metric}{13}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Chapter 14: Cross-metric synthesis}{13}{subsection.3.4}%
+\contentsline {paragraph}{Mantel-style cross-metric similarity.}{14}{section*.31}%
+\contentsline {section}{\numberline {4}Synthesis and behavioural cross-check (Part IV)}{14}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Chapter 15: What did subjects do?}{14}{subsection.4.1}%
+\contentsline {paragraph}{Trials.}{14}{section*.33}%
+\contentsline {paragraph}{Per-stimulus feature.}{15}{section*.34}%
+\contentsline {paragraph}{Stimulus-level prediction.}{15}{section*.35}%
+\contentsline {paragraph}{Trial-level prediction (logistic AUC).}{15}{section*.37}%
+\contentsline {paragraph}{Cluster vs.\ response agreement.}{15}{section*.39}%
+\contentsline {section}{\numberline {5}What the stimulus set actually contains}{16}{section.5}%
+\contentsline {section}{\numberline {A}File map}{17}{appendix.A}%
+\contentsline {paragraph}{Scripts (all under \texttt {stimuli-analyses/}).}{17}{section*.42}%
+\contentsline {paragraph}{Outputs.}{17}{section*.43}%
+\contentsline {section}{\numberline {B}Key formulae cheat sheet}{17}{appendix.B}%

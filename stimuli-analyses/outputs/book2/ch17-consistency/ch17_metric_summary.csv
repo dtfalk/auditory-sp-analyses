@@ -1,0 +1,11 @@
+block_type,metric,mean_consistency,median_consistency,n_subjects
+full_sentence,pearson_raw,0.5111920749923174,0.5069331411971911,26
+full_sentence,lagged_xcorr_max,0.5134636891018187,0.5082853681811486,26
+full_sentence,envelope_corr,0.5092546320346929,0.5015210739206748,26
+full_sentence,log_spectrum_corr,0.5087170044191276,0.5035476431734766,26
+full_sentence,mfcc_cosine,0.505828518381574,0.4961104081406722,26
+imagined_sentence,pearson_raw,0.5174678921433398,0.5160303110656712,26
+imagined_sentence,lagged_xcorr_max,0.5186297300434153,0.5101351351351351,26
+imagined_sentence,envelope_corr,0.5173871604958801,0.5064092188800109,26
+imagined_sentence,log_spectrum_corr,0.510210119768638,0.5040618374760775,26
+imagined_sentence,mfcc_cosine,0.5137477890862369,0.5052327369182719,26

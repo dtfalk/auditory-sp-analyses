@@ -1,0 +1,12 @@
+metric,method,n_trials,best_response_match_rate
+log_spectrum_corr,agglomerative_avg,7748,0.5299432111512649
+envelope_corr,agglomerative_avg,7748,0.5286525554981931
+pearson_raw,agglomerative_avg,7748,0.5260712441920495
+mfcc_cosine,agglomerative_avg,7748,0.5242643262777491
+lagged_xcorr_max,agglomerative_avg,7748,0.5221992772328343
+true_label_baseline,experimenter,7748,0.5099380485286525
+mfcc_cosine,spectral_kmeans,7748,0.5077439339184305
+log_spectrum_corr,spectral_kmeans,7748,0.5074858027878162
+lagged_xcorr_max,spectral_kmeans,7748,0.5068404749612804
+pearson_raw,spectral_kmeans,7748,0.5037429013939081
+envelope_corr,spectral_kmeans,7748,0.5024522457408364

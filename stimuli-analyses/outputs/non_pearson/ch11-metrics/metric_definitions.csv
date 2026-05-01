@@ -1,0 +1,6 @@
+metric,family,range,notes
+pearson_raw,time-domain,"[-1, 1]",Reference metric (Part II). Aligned waveform Pearson r.
+lagged_xcorr_max,time-domain,"[0, 1]",Max |normalized cross-correlation| within +/-200 ms; relaxes alignment.
+envelope_corr,envelope-based,"[-1, 1]",Pearson r on smoothed Hilbert envelope (low-pass ~50 Hz); slow energy contour.
+log_spectrum_corr,frequency-domain,"[-1, 1]",Pearson r on log(1+|rFFT|); time-shift invariant frequency content.
+mfcc_cosine,speech-oriented,"[-1, 1]",Cosine sim of z-scored mean+std-pooled MFCC(1..12) features (C0 dropped); compressed spectral envelope summary.
