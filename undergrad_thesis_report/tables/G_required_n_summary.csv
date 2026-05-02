@@ -1,0 +1,4 @@
+comparison,observed_n,observed_p,observed_d,n_for_80pct_power
+Oberlin full_sentence vs chance,16,0.005158727845187974,0.9858423369223966,11.0
+"Site Oberlin vs UChicago, full_sentence",26,0.14529184027536313,0.6492631350394481,
+Full vs Imagined paired (Unified),26,0.1488325017560678,0.2895863959614876,

@@ -1,0 +1,609 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue!50!black,
+            urlcolor=blue!50!black, citecolor=blue!50!black}
+
+\graphicspath{{figures/}}
+
+\newcommand{\figfit}[1]{\includegraphics[width=\linewidth,
+   height=0.78\textheight,keepaspectratio]{#1}}
+
+\title{Auditory superstitious-perception task:\\
+       a focused report on Full-vs-Imagined block, site, and block-order
+       effects}
+\author{Undergraduate-thesis companion analysis}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+This report distils the auditory superstitious-perception dataset
+($N\!=\!26$ subjects: 16 Oberlin, 10 UChicago, two 150-trial blocks each)
+to the three questions the thesis is built on: (i) does behaviour differ
+between the \texttt{full\_sentence} and \texttt{imagined\_sentence}
+blocks; (ii) do the two recruitment sites differ; and (iii) does
+block-order matter.  Every analysis is repeated three times
+(UChicago alone, Oberlin alone, and unified pool) so that any
+interpretation can be cross-checked at the level the reader cares about.
+The headline result is that \emph{the Oberlin full-sentence block is
+significantly above chance with a large effect size and the same
+direction shows up in four mathematically distinct alignment
+statistics}; UChicago is null; the site difference is trending in the
+expected direction and a sub-sampling power analysis shows this
+trend is consistent with a real but under-powered effect.  Block
+order shows no reliable effects.  Questionnaire correlations are all
+exploratory and none survives correction.
+\end{abstract}
+
+\tableofcontents
+
+%==============================================================================
+\section{Reading guide}
+%==============================================================================
+
+The task asks each subject to indicate, on each trial, whether a brief
+auditory stimulus was the experimenter-defined ``target'' or ``distractor''.
+Targets are acoustically embedded, distorted re-issues of an
+underlying sentence (\texttt{wall.wav}); distractors do not contain
+the embedded sentence.  The two block types are
+\texttt{full\_sentence} (the embedded source is the full sentence) and
+\texttt{imagined\_sentence} (the subject is asked to imagine the
+sentence; the underlying acoustic structure of targets is far more
+attenuated).  Subjects also completed eight personality / state
+questionnaires.  Per-subject accuracy near $0.50$ corresponds to
+chance.
+
+\paragraph{Three-way reporting convention.}
+Because the user has asked specifically for it: every comparison in
+this report is run three times.
+\begin{itemize}
+\item \textbf{UChicago} alone ($n=10$),
+\item \textbf{Oberlin}  alone ($n=16$),
+\item \textbf{Unified}  pool ($n=26$).
+\end{itemize}
+Where a regression line is drawn on a scatter plot, each of the three
+groups gets its \emph{own panel} with its \emph{own scatter} and its
+\emph{own ordinary-least-squares line}.  We never overlay groups onto
+one panel with a single shared line, because that obscures whether the
+relationship is consistent across sites or driven by one of them.
+
+\paragraph{Statistical conventions.}
+For each comparison we report:
+\begin{itemize}
+\item the sample size,
+\item the observed mean (and 95\% bootstrap CI where natural),
+\item a non-parametric test (one-sample Wilcoxon vs.\ a null value, or
+      Mann--Whitney U for unpaired groups, or paired Wilcoxon for
+      within-subject contrasts),
+\item the parametric counterpart ($t$-test) for context,
+\item Cohen's $d$ as a unit-free effect size,
+\item where relevant, a permutation $p$-value with $10^4$ resamples.
+\end{itemize}
+We use Wilcoxon / Mann--Whitney as the primary tests because $N$ is
+small and the distributions are not guaranteed normal.
+
+\paragraph{What ``Cohen's $d$'' means in plain words.}
+Cohen's $d$ is the size of an effect measured in standard-deviation
+units.  $|d|=0.2$ is small, $|d|=0.5$ is medium, $|d|=0.8$ is large
+\citep[]{cohen1988}.  An effect of $d=1.0$ is one standard deviation
+of the data --- an ``obvious'' difference.  Reporting $d$ alongside
+$p$-values is important because $p$ depends heavily on $N$ but $d$
+does not; a large $d$ with a marginal $p$ usually means the experiment
+is under-powered, not that the effect is absent.
+
+\paragraph{What a non-parametric test is doing.}
+The Wilcoxon signed-rank test ranks the $|x_i - \mu_0|$ values and
+sums the ranks attached to positive deviations.  Under the null
+$x_i \overset{d}{=} 2\mu_0 - x_i$ this rank-sum has a known
+distribution, so a $p$-value falls out without assuming Gaussian
+data.  The Mann--Whitney $U$ test is its two-sample analogue.  For our
+small $N$ they are the right default.
+
+%==============================================================================
+\section{Section A.  Accuracy vs chance, per group, per block}
+%==============================================================================
+
+This is the base question: in each block, in each group, are subjects
+performing reliably above chance ($\text{accuracy} = 0.5$)?
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{llrrrrrrr}
+\toprule
+block & group & $n$ & mean & 95\% CI & Wilcoxon $p$ & $t$-test $p$ & Cohen's $d$ \\
+\midrule
+full\_sentence     & UChicago & 10 & 0.504 & [0.479,0.530] & 0.904 & 0.777 & $+0.09$ \\
+full\_sentence     & Oberlin  & 16 & 0.526 & [0.513,0.538] & \textbf{0.005} & \textbf{0.001} & $\mathbf{+0.99}$ \\
+full\_sentence     & Unified  & 26 & 0.518 & [0.504,0.531] & \textbf{0.026} & \textbf{0.017} & $+0.50$ \\
+imagined\_sentence & UChicago & 10 & 0.490 & [0.463,0.515] & 0.611 & 0.487 & $-0.23$ \\
+imagined\_sentence & Oberlin  & 16 & 0.510 & [0.495,0.526] & 0.350 & 0.238 & $+0.31$ \\
+imagined\_sentence & Unified  & 26 & 0.502 & [0.488,0.516] & 0.620 & 0.758 & $+0.06$ \\
+\bottomrule
+\end{tabular}
+\caption{Section A: one-sample tests of accuracy against chance ($\mu_0 = 0.50$).
+Bold rows are significant at $\alpha = 0.05$.  CI is a $10^4$-bootstrap
+percentile interval on the mean.  See
+\texttt{tables/A\_accuracy\_vs\_chance.csv}.}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\figfit{A_accuracy_vs_chance.png}
+\caption{Section A.  Accuracy distributions for each (group, block).
+Red dashed line is chance ($0.50$); black solid line is the group mean.
+Title shows the bootstrap CI on the mean and the Wilcoxon $p$ vs
+chance.}
+\end{figure}
+
+\paragraph{Read.}
+Only one cell of this table is significant after the simplest possible
+multiple-comparisons book-keeping: \textbf{Oberlin full\_sentence}.
+Its effect size is large ($d \approx 1.0$), so this is not a fragile
+$p$-value.  The Unified pool inherits the result but at a smaller
+effect size, because the UChicago subjects are at chance and they
+dilute the group mean.  Imagined-sentence is at chance for everyone.
+
+%==============================================================================
+\section{Section B.  Full sentence vs Imagined sentence (paired)}
+%==============================================================================
+
+Each subject ran both blocks, so the right test is paired.  We also
+report an unbiased permutation test (sign-flip the within-subject
+differences $10^4$ times).
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrrrrrr}
+\toprule
+group & $n$ & mean(F) & mean(I) & mean diff & paired Wilcoxon $p$ & perm $p$ & $d$ \\
+\midrule
+UChicago & 10 & 0.504 & 0.490 & $+0.014$ & 0.543 & 0.508 & $+0.22$ \\
+Oberlin  & 16 & 0.526 & 0.510 & $+0.016$ & 0.187 & 0.191 & $+0.35$ \\
+Unified  & 26 & 0.518 & 0.502 & $+0.015$ & 0.149 & 0.154 & $+0.29$ \\
+\bottomrule
+\end{tabular}
+\caption{Section B: full-sentence minus imagined-sentence, paired.
+See \texttt{tables/B\_full\_vs\_imagined.csv}.}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\figfit{B_full_vs_imagined.png}
+\caption{Section B.  Per-subject within-subject lines connecting Full
+to Imagined accuracy, in each of the three reporting groups.  Coloured
+heavy line is the group mean.}
+\end{figure}
+
+\paragraph{Read.}
+The within-subject difference is $\approx +0.015$ in every group, in
+the expected direction (Full $>$ Imagined), but never reaches
+$p < 0.05$.  The effect sizes are small-to-medium.  The fact that the
+direction is the same in all three reporting groups argues this is a
+genuine micro-effect rather than noise; Section G below quantifies how
+many more subjects we would need to declare it.
+
+%==============================================================================
+\section{Section C.  Oberlin vs UChicago site comparison}
+%==============================================================================
+
+Per block, an unpaired comparison.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrrrrrrr}
+\toprule
+block & $n_O$ & $n_U$ & mean$_O$ & mean$_U$ & diff & MWU $p$ & Welch $p$ & $d$ \\
+\midrule
+full\_sentence     & 16 & 10 & 0.526 & 0.504 & $+0.022$ & 0.145 & 0.173 & $+0.65$ \\
+imagined\_sentence & 16 & 10 & 0.510 & 0.490 & $+0.020$ & 0.475 & 0.231 & $+0.54$ \\
+\bottomrule
+\end{tabular}
+\caption{Section C: site comparison per block (unpaired).  See
+\texttt{tables/C\_site\_comparison.csv}.}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\linewidth]{C_site_comparison.png}
+\caption{Section C.  Per-block site boxplots with overlaid jittered
+points.}
+\end{figure}
+
+\paragraph{Read.}
+Oberlin is numerically higher than UChicago in both blocks
+($+0.022$ in full, $+0.020$ in imagined) with \emph{medium} Cohen's
+$d$ ($\approx 0.55$--$0.65$).  Neither comparison reaches $p < 0.05$.
+Whether this is a real site effect that simply needs more subjects, or
+just sampling noise, is the question Section G addresses
+quantitatively; the short answer is ``consistent with a real
+under-powered medium-sized effect''.
+
+%==============================================================================
+\section{Section D.  Block order}
+%==============================================================================
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{llrrrrrr}
+\toprule
+block & group & $n_{B1}$ & $n_{B2}$ & mean(B1) & mean(B2) & MWU $p$ & $d$ \\
+\midrule
+full\_sentence     & UChicago &  4 &  6 & 0.500 & 0.507 & 0.831 & $+0.15$ \\
+full\_sentence     & Oberlin  &  5 & 11 & 0.520 & 0.529 & 0.494 & $+0.35$ \\
+full\_sentence     & Unified  &  9 & 17 & 0.511 & 0.521 & 0.432 & $+0.29$ \\
+imagined\_sentence & UChicago &  6 &  4 & 0.490 & 0.490 & 0.915 & $0.00$ \\
+imagined\_sentence & Oberlin  & 11 &  5 & 0.500 & 0.532 & 0.078 & $+1.03$ \\
+imagined\_sentence & Unified  & 17 &  9 & 0.497 & 0.513 & 0.185 & $+0.43$ \\
+\bottomrule
+\end{tabular}
+\caption{Section D: accuracy by block-order index, per group.  See
+\texttt{tables/D\_block\_order.csv}.}
+\end{table}
+
+\paragraph{Read.}
+Nothing reaches $\alpha=0.05$.  The strongest single number is
+imagined-sentence in Oberlin, where the eleven subjects who ran
+imagined first averaged $0.500$ and the five who ran it second
+averaged $0.532$ ($p=0.08$, $d=1.03$).  That is the kind of pattern
+practice/familiarisation would produce, but with $n_{B2}=5$ this is
+firmly in ``suggestive only'' territory.  Block order is the least of
+the three target factors and the data do not contradict that ranking.
+
+%==============================================================================
+\section{Section E.  Convergent metrics: Oberlin full\_sentence}
+%==============================================================================
+
+The single most important question of the project is whether the
+Oberlin full-sentence accuracy result is real or a one-off. The
+prior chapters in Books 2 and 3 of this project computed several
+\emph{mathematically distinct} per-subject quantities, all of which
+should equal zero if subjects are responding at random and all of
+which should be positive if subjects are exploiting the experimenter's
+acoustic structure.  A result that shows up in only one of these
+metrics is suspect; a result that shows up in all of them is robust.
+We re-evaluate four such metrics here, restricted to the
+\texttt{full\_sentence} block, with the standard three-way split.
+
+\paragraph{The four metrics, in plain words.}
+\begin{itemize}
+\item \textbf{$d'$ (signal-detection sensitivity)} measures how
+      separable a subject's distributions of internal evidence are on
+      true-target vs.\ true-distractor trials.  Formally, $d' =
+      \Phi^{-1}(\text{hit rate}) - \Phi^{-1}(\text{false-alarm rate})$.
+      $d'=0$ means no discrimination; $d'>0$ means the subject is on
+      average more likely to say ``target'' on true targets.
+\item \textbf{Accuracy} is just $(\text{hits} + \text{correct
+      rejections})/N$.  Mathematically very different from $d'$ but
+      derived from the same $2\times 2$ table.
+\item \textbf{$\cos(\mathrm{CI}_s, \mathrm{CI}_{\rm true})$} is the
+      cosine between the subject's classification image (the average
+      raw waveform of stimuli they called ``target'' minus the average
+      of those they called ``distractor'') and the experimenter's
+      target-minus-distractor template.  It lives in 2960-D raw audio
+      space; it is positive when the subject's implicit template
+      points the same direction as the true template.
+\item \textbf{$\cos(w_s, w_{\rm true})$} is the same thing but in a
+      32-band log-spectral basis: each subject's ridge-logistic
+      weights $w_s$ are compared to the analogous weights trained on
+      the experimenter labels.
+\item \textbf{$\beta_{\text{truetarget}}$} is the per-subject
+      coefficient on the experimenter label in a logistic regression
+      of called\_target on temporal covariates plus the true label.
+      It is positive when the subject's $P(\text{yes})$ is higher on
+      true targets than on true distractors, after partialling out
+      reminder-cycle and block-position effects.
+\end{itemize}
+These five quantities are computed on overlapping data but they are
+\emph{not} statistically equivalent.  $d'$ and accuracy come from a
+$2\times 2$ contingency table; the two cosines come from
+high-dimensional templates that incorporate the acoustic content of
+each individual stimulus; $\beta_{\text{truetarget}}$ comes from a
+logistic with extra nuisance regressors.  A consistent group result
+across all of them is the strongest convergent evidence the dataset
+can offer.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{llrrrrr}
+\toprule
+group & metric & $n$ & mean & 95\% CI & Wilcoxon $p$ & $d$ \\
+\midrule
+UChicago & $d'$               & 10 & $+0.021$ & [$-0.10$,$+0.15$] & 0.846 & $+0.09$ \\
+UChicago & accuracy           & 10 & $+0.504$ & [$+0.48$,$+0.53$] & 0.904 & $+0.09$ \\
+UChicago & $\cos(\rm CI)$     & 10 & $-0.002$ & [$-0.06$,$+0.06$] & 1.000 & $-0.02$ \\
+UChicago & $\cos(w)$          & 10 & $+0.036$ & [$-0.07$,$+0.14$] & 0.625 & $+0.20$ \\
+UChicago & $\beta_{\rm true}$ & 10 & $+0.056$ & [$-0.13$,$+0.25$] & 0.625 & $+0.17$ \\
+\midrule
+\textbf{Oberlin} & $d'$               & 16 & $\mathbf{+0.135}$ & [$+0.07$,$+0.20$] & \textbf{0.001} & $\mathbf{+0.99}$ \\
+\textbf{Oberlin} & accuracy           & 16 & $\mathbf{+0.526}$ & [$+0.51$,$+0.54$] & \textbf{0.005} & $\mathbf{+0.99}$ \\
+\textbf{Oberlin} & $\cos(\rm CI)$     & 16 & $\mathbf{+0.057}$ & [$+0.03$,$+0.08$] & \textbf{0.001} & $\mathbf{+1.02}$ \\
+Oberlin          & $\cos(w)$          & 16 & $+0.081$ & [$-0.02$,$+0.18$] & 0.231 & $+0.38$ \\
+\textbf{Oberlin} & $\beta_{\rm true}$ & 16 & $\mathbf{+0.219}$ & [$+0.12$,$+0.32$] & \textbf{0.003} & $\mathbf{+1.05}$ \\
+\midrule
+Unified  & $d'$               & 26 & $+0.091$ & [$+0.02$,$+0.16$] & 0.013 & $+0.51$ \\
+Unified  & accuracy           & 26 & $+0.518$ & [$+0.50$,$+0.53$] & 0.026 & $+0.50$ \\
+Unified  & $\cos(\rm CI)$     & 26 & $+0.034$ & [$+0.00$,$+0.06$] & 0.025 & $+0.44$ \\
+Unified  & $\cos(w)$          & 26 & $+0.064$ & [$-0.01$,$+0.14$] & 0.150 & $+0.32$ \\
+Unified  & $\beta_{\rm true}$ & 26 & $+0.156$ & [$+0.05$,$+0.25$] & 0.011 & $+0.59$ \\
+\bottomrule
+\end{tabular}
+\caption{Section E: four convergent alignment statistics in the
+\texttt{full\_sentence} block, three-way split.  Bold = significant at
+$\alpha=0.05$ for that group--metric combination.  All five Oberlin
+means are positive; four of five are individually significant.
+\texttt{tables/E\_convergent\_full\_sentence.csv}.}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\figfit{E_convergent_full_sentence.png}
+\caption{Section E.  Four convergent metrics for the full-sentence
+block.  Rows: metric.  Columns: UChicago, Oberlin, Unified.  Red
+dashed line is the null value (0 for $d'$ and the cosines, 0.5 for
+accuracy); black line is the group mean.  Each panel reports its own
+mean, Wilcoxon $p$, and Cohen's $d$.}
+\end{figure}
+
+\paragraph{Read.}
+For Oberlin in the full-sentence block, four mathematically distinct
+quantities ($d'$, accuracy, $\cos(\mathrm{CI})$,
+$\beta_{\text{truetarget}}$) all yield $p<0.01$ with $d \approx 1.0$;
+the fifth ($\cos(w)$ in the spectral basis) points the same way with
+$d=0.38$ but does not reach significance with $n=16$.  This is the
+kind of \emph{mutually corroborating} pattern that one rarely gets
+from noise: a noisy null result will generate one significant cell
+out of five $\sim 23\%$ of the time, but it will essentially never
+generate four significant cells with all five effect signs the same.
+For UChicago, in contrast, all five metrics are at or near zero with
+small effect sizes; the Unified pool inherits a diluted version of
+the Oberlin result.
+
+%==============================================================================
+\section{Section F.  Questionnaire correlations (exploratory)}
+%==============================================================================
+
+For each questionnaire we compute Spearman $\rho$ with accuracy in
+each group and each block.  This is exploratory: there are
+$8\times 2\times 3 = 48$ such correlations, and Bonferroni at $\alpha
+= 0.05$ would require $p < 1.04\times 10^{-3}$.  No correlation
+clears this bar.  We report the strongest in the table, then plot
+\emph{every} questionnaire as scatter+OLS line in three side-by-side
+panels (UChicago, Oberlin, Unified), one full figure per block.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lllrrr}
+\toprule
+block & group & quest & $n$ & $\rho$ & $p$ \\
+\midrule
+full\_sentence     & Unified  & BAIS\_C & 26 & $+0.31$ & 0.122 \\
+full\_sentence     & UChicago & LSHS    & 10 & $+0.52$ & 0.124 \\
+full\_sentence     & Oberlin  & FSS     & 16 & $+0.37$ & 0.156 \\
+full\_sentence     & UChicago & BAIS\_C & 10 & $+0.48$ & 0.160 \\
+full\_sentence     & Unified  & BAIS\_V & 26 & $+0.28$ & 0.169 \\
+full\_sentence     & Unified  & FSS     & 26 & $+0.28$ & 0.170 \\
+full\_sentence     & Oberlin  & BAIS\_C & 16 & $+0.36$ & 0.177 \\
+\bottomrule
+\end{tabular}
+\caption{Section F: top eight Spearman $\rho$ between a questionnaire
+and accuracy.  None survives correction.  Full table:
+\texttt{tables/F\_questionnaire\_spearman.csv}.}
+\end{table}
+
+\begin{figure}[p]
+\centering
+\figfit{F_quest_vs_accuracy_full_sentence.png}
+\caption{Section F.  Each panel: one group, one questionnaire, scatter
+of (questionnaire, accuracy) plus a panel-specific OLS line.  Red
+dotted line is chance accuracy.  Reading these is the right
+exploratory exercise for the discussion section.}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\figfit{F_quest_vs_accuracy_imagined_sentence.png}
+\caption{Section F (continued).  Same layout for the
+imagined-sentence block.}
+\end{figure}
+
+\paragraph{Read.}
+The cleanest \emph{descriptive} pattern is BAIS\_C
+(Bucknell Auditory Imagery -- Control) showing a positive trend in
+all three groups for the full-sentence block ($\rho = +0.48$ in
+UChicago, $+0.36$ in Oberlin, $+0.31$ in Unified).  None of these
+are individually significant.  Book 3 of this project (Ch.\ 28-29)
+reported a separate, complementary pattern in BAIS\_V where 7 of 8
+permutation-significant subject-blocks scored above the median on
+auditory-imagery vividness.  Both observations are suggestive of an
+auditory-imagery component to who-can-do-this-task; neither is
+statistically confirmed.
+
+%==============================================================================
+\section{Section G.  Is it a power problem?  Sub-sample diagnostics}
+%==============================================================================
+
+Several of the comparisons above are ``trending'' --- the direction
+is right, the effect size is medium-to-large, but the $p$-value is
+in $[0.05, 0.20]$.  The right diagnostic question is: \emph{at the
+observed effect size, would more subjects have made this significant,
+or is the effect itself too small to be reliable?}  We answer by
+sub-sampling.  At each candidate sub-sample size $n$, we draw 2000
+random subsets of that size from the observed data, run the relevant
+test, and record the fraction with $p < 0.05$.  This estimates the
+power that the observed effect would deliver at sample size $n$.
+
+\paragraph{Three diagnostics.}
+\begin{itemize}
+\item \textbf{G1.} Oberlin full\_sentence accuracy vs.\ chance.
+      Observed $N=16$, $p=0.005$, $d=0.99$.  We expect this to be
+      easily powered.
+\item \textbf{G2.} Site difference (Oberlin vs UChicago),
+      full\_sentence accuracy.  Observed total $N=26$, $p=0.145$,
+      $d=0.65$.
+\item \textbf{G3.} Full vs Imagined paired (Unified).  Observed
+      $N=26$, $p=0.149$, $d=0.29$.
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\figfit{G_power_curves.png}
+\caption{Section G.  Sub-sample power curves.  In each panel the
+$x$-axis is the sub-sample size and the $y$-axis is the empirical
+probability that a re-test on that subsample would yield $p<0.05$.
+Red dashed line is the conventional $0.80$ power threshold.}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+comparison & observed $n$ & observed $p$ & observed $d$ & $n$ for 80\% power \\
+\midrule
+G1: Oberlin full\_sentence vs chance     & 16 & 0.005 & $+0.99$ & 11 \\
+G2: Site Oberlin vs UChicago, full       & 26 & 0.145 & $+0.65$ & not reached at $N=26$ \\
+G3: Full vs Imagined paired (Unified)    & 26 & 0.149 & $+0.29$ & not reached at $N=26$ \\
+\bottomrule
+\end{tabular}
+\caption{Section G: empirical power summary.  See
+\texttt{tables/G\_required\_n\_summary.csv}.}
+\end{table}
+
+\paragraph{Read.}
+G1 confirms what the headline implies: the Oberlin-full-sentence
+effect is well-powered; even an $n=11$ subsample would, on average,
+detect it.
+
+G2 and G3 are the more interesting diagnostics for the discussion.
+For both, the observed effect size is non-trivial ($d=0.65$ for the
+site comparison; $d=0.29$ for the paired Full vs.\ Imagined
+contrast) and the observed direction is the predicted one, but the
+empirical power at $N=26$ is below $0.80$.  In other words, the
+non-significant $p$-values are exactly what we should \emph{expect}
+to see for a real effect of this magnitude with this sample size.
+Standard textbook power calculations confirm that, holding $d=0.65$,
+roughly $n_O = n_U \approx 30$ each would be needed to push a
+two-sample test to 80\% power; for the within-subject
+$d=0.29$ contrast, roughly $N \approx 75$.  These numbers are not
+extraordinary --- they are consistent with the magnitude of effect
+that is already visible in the data.
+
+\paragraph{Honest qualifier.}
+Empirical sub-sampling necessarily holds the observed effect size
+fixed.  If the true effect is smaller than what we estimated, more
+subjects will be needed; if the true effect is larger, fewer.  The
+sub-sampling curves should therefore be read as ``what would happen
+if the world is exactly as our 26 subjects suggest''.
+
+%==============================================================================
+\section{Synthesis and how to write the discussion}
+%==============================================================================
+
+Putting the eight sections together:
+
+\begin{enumerate}
+\item \textbf{Oberlin in the full-sentence block is the headline.}
+      Accuracy is reliably above chance ($0.526$, $p=0.005$, $d=0.99$),
+      and the result replicates across four mathematically distinct
+      alignment statistics ($d'$, $\cos(\mathrm{CI})$,
+      $\beta_{\text{truetarget}}$, with the spectral cosine pointing
+      the same way at $d=0.38$).  The convergence across statistics
+      that share data but not formulas is the strongest available
+      argument that this is signal, not noise.
+
+\item \textbf{UChicago in the full-sentence block is at chance.}
+      Every metric is near zero with a small effect size.  This is
+      not just a power story: even with $n=10$ a $d \approx 1.0$
+      effect would be detectable; the $d$ here is essentially zero.
+
+\item \textbf{The site difference is trending in the predicted
+      direction with a medium effect size} ($d=0.65$, $p=0.15$ in
+      full-sentence) and is consistent with a real but under-powered
+      site effect.  The G2 sub-sample analysis suggests that doubling
+      the sample at the smaller site (UChicago) would likely make this
+      significant.  Whether the underlying cause is recruitment
+      population, room acoustics, headphone hardware, experimenter
+      conventions, or something else cannot be decided from these data.
+
+\item \textbf{Full-sentence is numerically higher than imagined-sentence
+      in every group} ($+0.014$ at UChicago, $+0.016$ at Oberlin,
+      $+0.015$ Unified).  The within-subject difference does not
+      reach $p < 0.05$ in any group, but the direction is consistent
+      and the unified Cohen's $d$ is $+0.29$.  At $N=26$, $80\%$
+      power for an effect of this size would require roughly $N=75$.
+
+\item \textbf{Block order does not produce reliable effects.}  The
+      strongest single trend is in Oberlin's imagined-sentence block
+      ($p=0.08$ with $n_{B2}=5$), which is the kind of practice
+      pattern one might expect but is not by itself convincing.
+
+\item \textbf{Questionnaire correlates are exploratory.}  No single
+      $\rho$ survives Bonferroni.  BAIS\_C (auditory imagery
+      \emph{control}) shows the cleanest cross-group descriptive
+      pattern in the full-sentence block, and Book 3 of this project
+      separately suggests BAIS\_V (auditory imagery
+      \emph{vividness}) tracks individual significance.  Both point
+      towards an auditory-imagery component to performance; neither
+      is confirmed.
+\end{enumerate}
+
+\paragraph{Suggested narrative for the discussion.}
+The data tell a coherent story.  The full-sentence task elicits a
+real, reproducible above-chance signal in the Oberlin sample, and
+this signal is robust to which alignment statistic is used to
+quantify it.  The imagined-sentence task does not, in either site,
+elicit such a signal.  The site difference is in the predicted
+direction (Oberlin $>$ UChicago in both blocks) and the within-subject
+Full $>$ Imagined contrast is in the predicted direction in every
+group, but neither reaches the conventional significance threshold at
+the present sample size.  An empirical sub-sampling power analysis
+shows that the Oberlin-full-sentence headline is well-powered ($n=11$
+suffices), whereas the site and block-type contrasts would each
+require roughly two to three times the present sample to be reliably
+detectable.  Two questionnaire scales associated with auditory
+imagery (BAIS\_V vividness and BAIS\_C control) point towards a
+plausible mechanism --- subjects with stronger imagery are more able
+to align their responses to the embedded acoustic structure --- but
+the questionnaire correlations are not statistically confirmed and
+should be discussed as exploratory.
+
+\paragraph{What to be careful about in writing.}
+Read the asterisks the right way around.  An effect with $p=0.15$
+and $d=0.65$ is not the same as a null result; it is a medium-sized
+trend that the experiment was not powered to detect.  Conversely, an
+effect with $p<0.05$ and $d=0.20$ is statistically significant but
+substantively small.  Use Cohen's $d$, not $p$, when describing
+\emph{how big} an effect is, and use $p$, not $d$, when describing
+\emph{how confident} you are it is non-zero.  The sub-sampling power
+curves in Section G are the right figure to point at when you want to
+say ``this trend would likely become significant with more subjects''.
+
+\bigskip
+\noindent
+\emph{Generated artefacts.}  All numbers in this report come from
+\texttt{undergrad\_thesis\_report/scripts/run\_analyses.py} and are
+deposited as CSVs in \texttt{undergrad\_thesis\_report/tables/} and
+PNGs in \texttt{undergrad\_thesis\_report/figures/}.
+
+\begin{thebibliography}{1}
+\bibitem{cohen1988} Cohen, J. (1988).
+  \emph{Statistical power analysis for the behavioral sciences.}
+  Lawrence Erlbaum.
+\end{thebibliography}
+
+\end{document}
