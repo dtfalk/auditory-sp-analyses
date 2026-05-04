@@ -1,0 +1,5 @@
+subject_number,block_index,block_scheme,pre_or_post,time,response,response_text
+03132025001,1,imagined_sentence,pre,2026-03-13 12:29:49,3,3 - Awake; but relaxed; responsive but not fully alert
+03132025001,1,imagined_sentence,post,2026-03-13 13:01:58,4,4 - Somewhat foggy; let down
+03132025001,2,full_sentence,pre,2026-03-13 13:05:27,3,3 - Awake; but relaxed; responsive but not fully alert
+03132025001,2,full_sentence,post,2026-03-13 13:25:19,4,4 - Somewhat foggy; let down

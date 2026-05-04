@@ -1,0 +1,5 @@
+subject_number,block_index,block_scheme,pre_or_post,time,response,response_text
+04182026001,1,imagined_sentence,pre,2026-04-18 15:12:16,3,3 - Awake; but relaxed; responsive but not fully alert
+04182026001,1,imagined_sentence,post,2026-04-18 15:30:29,6,6 - Sleepy; woozy; fighting sleep; prefer to lie down
+04182026001,2,full_sentence,pre,2026-04-18 15:37:57,4,4 - Somewhat foggy; let down
+04182026001,2,full_sentence,post,2026-04-18 15:55:08,6,6 - Sleepy; woozy; fighting sleep; prefer to lie down

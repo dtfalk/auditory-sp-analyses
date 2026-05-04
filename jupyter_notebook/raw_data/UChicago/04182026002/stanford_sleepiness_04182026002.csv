@@ -1,0 +1,5 @@
+subject_number,block_index,block_scheme,pre_or_post,time,response,response_text
+04182026002,1,imagined_sentence,pre,2026-04-18 17:20:21,1,1 - Feeling active; vital; alert; or wide awake
+04182026002,1,imagined_sentence,post,2026-04-18 17:37:31,2,2 - Functioning at high levels; but not at peak; able to concentrate
+04182026002,2,full_sentence,pre,2026-04-18 17:53:19,1,1 - Feeling active; vital; alert; or wide awake
+04182026002,2,full_sentence,post,2026-04-18 18:09:16,1,1 - Feeling active; vital; alert; or wide awake

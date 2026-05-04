@@ -1,0 +1,5 @@
+subject_number,block_index,block_scheme,pre_or_post,time,response,response_text
+04032026001,1,full_sentence,pre,2026-04-03 16:06:02,4,4 - Somewhat foggy; let down
+04032026001,1,full_sentence,post,2026-04-03 16:24:16,6,6 - Sleepy; woozy; fighting sleep; prefer to lie down
+04032026001,2,imagined_sentence,pre,2026-04-03 16:30:44,5,5 - Foggy; losing interest in remaining awake; slowed down
+04032026001,2,imagined_sentence,post,2026-04-03 16:44:47,4,4 - Somewhat foggy; let down

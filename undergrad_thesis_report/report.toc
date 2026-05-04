@@ -1,0 +1,23 @@
+\contentsline {section}{\numberline {1}Reading guide}{1}{section.1}%
+\contentsline {paragraph}{Three-way reporting convention.}{2}{section*.2}%
+\contentsline {paragraph}{Statistical conventions.}{2}{section*.3}%
+\contentsline {paragraph}{What ``Cohen's $d$'' means in plain words.}{2}{section*.4}%
+\contentsline {paragraph}{What a non-parametric test is doing.}{2}{section*.5}%
+\contentsline {section}{\numberline {2}Section A. Accuracy vs chance, per group, per block}{2}{section.2}%
+\contentsline {paragraph}{Read.}{2}{section*.8}%
+\contentsline {section}{\numberline {3}Section B. Full sentence vs Imagined sentence (paired)}{3}{section.3}%
+\contentsline {paragraph}{Read.}{3}{section*.11}%
+\contentsline {section}{\numberline {4}Section C. Oberlin vs UChicago site comparison}{3}{section.4}%
+\contentsline {paragraph}{Read.}{3}{section*.14}%
+\contentsline {section}{\numberline {5}Section D. Block order}{4}{section.5}%
+\contentsline {paragraph}{Read.}{4}{section*.16}%
+\contentsline {section}{\numberline {6}Section E. Convergent metrics: Oberlin full\_sentence}{4}{section.6}%
+\contentsline {paragraph}{The four metrics, in plain words.}{5}{section*.17}%
+\contentsline {paragraph}{Read.}{6}{section*.20}%
+\contentsline {section}{\numberline {7}Section F. Questionnaire correlations (exploratory)}{6}{section.7}%
+\contentsline {paragraph}{Read.}{6}{section*.24}%
+\contentsline {section}{\numberline {8}Section G. Is it a power problem? Sub-sample diagnostics}{6}{section.8}%
+\contentsline {paragraph}{Three diagnostics.}{7}{section*.25}%
+\contentsline {paragraph}{Read.}{8}{section*.28}%
+\contentsline {paragraph}{Honest qualifier.}{8}{section*.29}%
+\contentsline {section}{\numberline {9}Synthesis}{8}{section.9}%

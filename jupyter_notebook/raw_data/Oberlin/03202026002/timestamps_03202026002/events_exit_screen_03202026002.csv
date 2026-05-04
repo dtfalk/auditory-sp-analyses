@@ -1,0 +1,3 @@
+Event,Timestamp_ns,ms_since_last,s_since_last
+screen_presented,819135784254400,0,0.0
+key_pressed:f_continue,819175163100100,39378.846,39.378846

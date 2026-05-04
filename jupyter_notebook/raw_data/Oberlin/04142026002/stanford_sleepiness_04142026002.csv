@@ -1,0 +1,5 @@
+subject_number,block_index,block_scheme,pre_or_post,time,response,response_text
+04142026002,1,full_sentence,pre,2026-04-14 16:26:12,2,2 - Functioning at high levels; but not at peak; able to concentrate
+04142026002,1,full_sentence,post,2026-04-14 16:45:02,2,2 - Functioning at high levels; but not at peak; able to concentrate
+04142026002,2,imagined_sentence,pre,2026-04-14 16:46:25,2,2 - Functioning at high levels; but not at peak; able to concentrate
+04142026002,2,imagined_sentence,post,2026-04-14 17:02:19,3,3 - Awake; but relaxed; responsive but not fully alert

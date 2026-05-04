@@ -1,0 +1,5 @@
+subject_number,block_index,block_scheme,pre_or_post,time,response,response_text
+03172026001,1,imagined_sentence,pre,2026-03-17 16:24:04,5,5 - Foggy; losing interest in remaining awake; slowed down
+03172026001,1,imagined_sentence,post,2026-03-17 16:44:07,5,5 - Foggy; losing interest in remaining awake; slowed down
+03172026001,2,full_sentence,pre,2026-03-17 16:49:20,5,5 - Foggy; losing interest in remaining awake; slowed down
+03172026001,2,full_sentence,post,2026-03-17 17:06:00,6,6 - Sleepy; woozy; fighting sleep; prefer to lie down

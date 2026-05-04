@@ -1,0 +1,5 @@
+subject_number,block_index,block_scheme,pre_or_post,time,response,response_text
+03202026002,1,imagined_sentence,pre,2026-03-20 13:45:23,2,2 - Functioning at high levels; but not at peak; able to concentrate
+03202026002,1,imagined_sentence,post,2026-03-20 14:08:59,6,6 - Sleepy; woozy; fighting sleep; prefer to lie down
+03202026002,2,full_sentence,pre,2026-03-20 14:15:34,4,4 - Somewhat foggy; let down
+03202026002,2,full_sentence,post,2026-03-20 14:30:13,3,3 - Awake; but relaxed; responsive but not fully alert

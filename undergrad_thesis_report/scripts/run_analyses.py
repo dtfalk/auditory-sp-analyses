@@ -1,8 +1,8 @@
-"""Undergraduate thesis report -- comprehensive analysis script.
+"""Arwen Thesis report helper -- analysis script.
 
 Single script that produces every CSV and PNG used by ../report.tex.
 
-Focus per user (David):
+Focus:
     1. Full sentence vs imagined sentence (the two block types).
     2. Oberlin vs UChicago site comparison.
     3. Block order (least important).
@@ -19,8 +19,8 @@ Inputs (already produced by earlier chapters):
     stimuli-analyses/book3_helpers.load_questionnaires / load_block_order
 
 Outputs:
-    undergrad_thesis_report/figures/*.png
-    undergrad_thesis_report/tables/*.csv
+    thesis_report_helper/figures/*.png
+    thesis_report_helper/tables/*.csv
 """
 
 # ============================================================================
@@ -379,8 +379,6 @@ print(order_df.round(4).to_string(index = False), flush = True)
 
 # ============================================================================
 # SECTION E.  Convergent metrics for Oberlin full_sentence
-#             (the headline finding -- multiple mathematically distinct
-#              quantities all point the same way)
 # ============================================================================
 
 print("\n=== Section E: convergent metrics Oberlin full_sentence ===",
@@ -450,7 +448,7 @@ plt.close()
 
 # ============================================================================
 # SECTION F.  Questionnaire correlations
-#   -- per block, separate UChicago / Oberlin / Unified scatter+line panel
+#   -- per block, separate UChicago / Oberlin / Unified scatter + line panel
 #   -- primary outcome variable: accuracy
 # ============================================================================
 
@@ -518,7 +516,7 @@ for block in ("full_sentence", "imagined_sentence"):
 #   For Oberlin full_sentence accuracy vs chance (the headline) and
 #   for site Oberlin vs UChicago (the trend), produce subsample-size
 #   curves: at each n_sub from 5 to N_full, draw 2000 random subsamples,
-#   compute the test statistic, and report the fraction with p<0.05.
+#   compute the test statistic, and report the fraction with p < 0.05.
 #   This shows whether the existing N is the limit, or whether the effect
 #   is stable.
 # ============================================================================

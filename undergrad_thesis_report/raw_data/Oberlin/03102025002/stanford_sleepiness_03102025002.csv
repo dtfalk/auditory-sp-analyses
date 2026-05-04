@@ -1,0 +1,5 @@
+subject_number,block_index,block_scheme,pre_or_post,time,response,response_text
+03102025002,1,imagined_sentence,pre,2026-03-10 16:24:56,2,2 - Functioning at high levels; but not at peak; able to concentrate
+03102025002,1,imagined_sentence,post,2026-03-10 16:49:04,3,3 - Awake; but relaxed; responsive but not fully alert
+03102025002,2,full_sentence,pre,2026-03-10 16:52:31,3,3 - Awake; but relaxed; responsive but not fully alert
+03102025002,2,full_sentence,post,2026-03-10 17:09:19,4,4 - Somewhat foggy; let down

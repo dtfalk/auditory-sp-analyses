@@ -1,0 +1,172 @@
+===========================================================================
+INITIAL SYSTEM STATE
+===========================================================================
+
+Name      Status StartType
+----      ------ ---------
+SysMain  Stopped  Disabled
+WSearch  Stopped  Disabled
+wuauserv Running    Manual
+
+
+Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+EXPERIMENT MODE ACTIVATION
+===========================================================================
+
+Entering experiment mode...
+Project root detected as:
+  C:\Users\Apex\Desktop\auditory-superstitious-perception
+SysMain stopped and disabled.
+WSearch stopped and disabled.
+wuauserv stopped and disabled.
+Experiment mode enabled.
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+STATE AFTER ENTERING EXPERIMENT MODE
+===========================================================================
+
+Name      Status StartType
+----      ------ ---------
+SysMain  Stopped  Disabled
+WSearch  Stopped  Disabled
+wuauserv Stopped  Disabled
+
+
+Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+EXPERIMENT LOGS
+===========================================================================
+
+pygame 2.6.1 (SDL 2.28.4, Python 3.11.9)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Using output: 22 Phones 1-2 (2- MOTU MicroBook)
+Device native sample rate: 44100 Hz
+Audio device: Phones 1-2 (2- MOTU MicroBook)
+Host API: Windows WASAPI
+Sample rate: 44100
+Exclusive mode: True
+Audio callback diagnostics:
+  Runtime (s): 4596.90
+  output_underflow: 0
+  output_overflow: 0
+  input_underflow: 0
+  input_overflow: 0
+  priming_output: 0
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+SYSTEM RESOURCE USAGE DURING EXPERIMENT
+===========================================================================
+
+  Monitoring Duration:  77 min 11 sec  (463 samples @ 10s interval)
+
+  CPU Usage:
+    Min:     0.0%
+    Max:    15.3%
+    Avg:     5.9%
+
+  RAM Usage:  (Total: 15.75 GB)
+    Min:     2.88 GB  ( 18.3%)
+    Max:     3.24 GB  ( 20.6%)
+    Avg:     2.98 GB  ( 18.9%)
+
+  Disk Activity (I/O Busy %):
+    Min:     0.0%
+    Max:     0.5%
+    Avg:     0.0%
+
+  Disk Read Throughput:
+    Min:         0 B/s
+    Max:     12.7 MB/s
+    Avg:      178 KB/s
+
+  Disk Write Throughput:
+    Min:         0 B/s
+    Max:      830 KB/s
+    Avg:       22 KB/s
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+EXPERIMENT MODE DEACTIVATION
+===========================================================================
+
+Restoring normal system state...
+WSearch restored to Disabled.
+SysMain restored to Disabled.
+wuauserv restored to Manual.
+System restored.
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+FINAL SYSTEM STATE AFTER RESTORE
+===========================================================================
+
+Name      Status StartType
+----      ------ ---------
+SysMain  Stopped  Disabled
+WSearch  Stopped  Disabled
+wuauserv Running    Manual
+
+
+Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+SUBJECT SUMMARY STATISTICS
+===========================================================================
+
+  Subject: 04032026001
+
+    Block 1: full_sentence
+    Block 1 D-Prime: -0.15096921549677725
+    Block 2: imagined_sentence
+    Block 2 D-Prime: -0.02172501897488993
+
+===========================================================================
+===========================================================================
+
+===========================================================================
+CREATING DEIDENTIFIED DATA FOLDER
+===========================================================================
+
+Created deidentified data folder.
+
+===========================================================================
+===========================================================================
+
+---------------------------------------------------------------------------
+Subject 04032026001 results stored in:
+  C:\Users\Apex\Desktop\auditory-superstitious-perception\results\04032026001
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+Deidentified results folder:
+  C:\Users\Apex\Desktop\auditory-superstitious-perception\results_deidentified
+---------------------------------------------------------------------------

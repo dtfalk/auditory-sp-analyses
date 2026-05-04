@@ -1,0 +1,6 @@
+Event,Timestamp_ns,ms_since_last,s_since_last
+screen_presented,210253116497300,0,0.0
+text_submitted:target_word,210267312049700,14195.552,14.195552
+text_submitted:target_sentence,210289413711600,22101.662,22.101662
+text_submitted:listening_experience,210325505836700,36092.125,36.092125
+text_submitted:technical_issues,210358117558300,32611.722,32.611722

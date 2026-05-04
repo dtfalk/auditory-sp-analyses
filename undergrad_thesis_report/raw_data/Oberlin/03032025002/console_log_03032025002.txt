@@ -1,0 +1,172 @@
+===========================================================================
+INITIAL SYSTEM STATE
+===========================================================================
+
+Name      Status StartType
+----      ------ ---------
+SysMain  Running Automatic
+WSearch  Running Automatic
+wuauserv Running    Manual
+
+
+Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+EXPERIMENT MODE ACTIVATION
+===========================================================================
+
+Entering experiment mode...
+Project root detected as:
+  C:\Users\14136\OneDrive\Desktop\auditory-superstitious-perception
+SysMain stopped and disabled.
+WSearch stopped and disabled.
+wuauserv stopped and disabled.
+Experiment mode enabled.
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+STATE AFTER ENTERING EXPERIMENT MODE
+===========================================================================
+
+Name      Status StartType
+----      ------ ---------
+SysMain  Stopped  Disabled
+WSearch  Stopped  Disabled
+wuauserv Stopped  Disabled
+
+
+Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+EXPERIMENT LOGS
+===========================================================================
+
+pygame 2.6.1 (SDL 2.28.4, Python 3.12.10)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Using output: 15 Headphones (Realtek(R) Audio)
+Device native sample rate: 48000 Hz
+Audio device: Headphones (Realtek(R) Audio)
+Host API: Windows WASAPI
+Sample rate: 48000
+Exclusive mode: True
+Audio callback diagnostics:
+  Runtime (s): 2840.35
+  output_underflow: 0
+  output_overflow: 0
+  input_underflow: 0
+  input_overflow: 0
+  priming_output: 0
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+SYSTEM RESOURCE USAGE DURING EXPERIMENT
+===========================================================================
+
+  Monitoring Duration:  47 min 33 sec  (286 samples @ 10s interval)
+
+  CPU Usage:
+    Min:     0.0%
+    Max:    12.6%
+    Avg:     7.2%
+
+  RAM Usage:  (Total: 15.71 GB)
+    Min:    10.47 GB  ( 66.6%)
+    Max:    10.86 GB  ( 69.1%)
+    Avg:    10.78 GB  ( 68.6%)
+
+  Disk Activity (I/O Busy %):
+    Min:     0.0%
+    Max:    10.5%
+    Avg:     0.4%
+
+  Disk Read Throughput:
+    Min:         0 B/s
+    Max:     12.2 MB/s
+    Avg:       89 KB/s
+
+  Disk Write Throughput:
+    Min:         0 B/s
+    Max:     13.3 MB/s
+    Avg:      476 KB/s
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+EXPERIMENT MODE DEACTIVATION
+===========================================================================
+
+Restoring normal system state...
+WSearch restored to Auto.
+SysMain restored to Auto.
+wuauserv restored to Manual.
+System restored.
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+FINAL SYSTEM STATE AFTER RESTORE
+===========================================================================
+
+Name      Status StartType
+----      ------ ---------
+SysMain  Running Automatic
+WSearch  Running Automatic
+wuauserv Running    Manual
+
+
+Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)
+===========================================================================
+===========================================================================
+
+
+
+===========================================================================
+SUBJECT SUMMARY STATISTICS
+===========================================================================
+
+  Subject: 03032025002
+
+    Block 1: full_sentence
+    Block 1 D-Prime: 0.05015358346473367
+    Block 2: imagined_sentence
+    Block 2 D-Prime: 0.5012440130477329
+
+===========================================================================
+===========================================================================
+
+===========================================================================
+CREATING DEIDENTIFIED DATA FOLDER
+===========================================================================
+
+Created deidentified data folder.
+
+===========================================================================
+===========================================================================
+
+---------------------------------------------------------------------------
+Subject 03032025002 results stored in:
+  C:\Users\14136\OneDrive\Desktop\auditory-superstitious-perception\results\03032025002
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+Deidentified results folder:
+  C:\Users\14136\OneDrive\Desktop\auditory-superstitious-perception\results_deidentified
+---------------------------------------------------------------------------

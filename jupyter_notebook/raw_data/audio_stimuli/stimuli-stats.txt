@@ -1,0 +1,91 @@
+1.59 CUTOFF
+
+Summary Statistics for full_sentence-targets condition (n = 75)
+======================================
+Mean: 0.07468979150056838
+Std: 0.00494907466284343
+Range: 0.024108633399009705
+Max: 0.09426983445882797
+Min: 0.07016120105981827
+
+
+Summary Statistics for full_sentence-distractors condition (n = 75)
+======================================
+Mean: 1.2088304579549458e-07
+Std: 7.863358185463568e-07
+Range: 2.7855954840561026e-06
+Max: 1.392915464748512e-06
+Min: -1.3926800193075906e-06
+
+
+Summary Statistics for imagined_sentence-targets condition (n = 75)
+======================================
+Mean: 0.07468967447678249
+Std: 0.004886993798188284
+Range: 0.022611334919929504
+Max: 0.09276425838470459
+Min: 0.07015292346477509
+
+
+Summary Statistics for imagined_sentence-distractors condition (n = 75)
+======================================
+Mean: 1.2087108406907039e-07
+Std: 9.029253157143147e-07
+Range: 2.7912433324672747e-06
+Max: 1.3972644410387147e-06
+Min: -1.39397889142856e-06
+
+
+Summary Statistics for examples-targets condition (n = 3)
+======================================
+Mean: 0.07269793748855591
+Std: 0.0014424127697013765
+Range: 0.003179885447025299
+Max: 0.07473244518041611
+Min: 0.07155255973339081
+
+
+Summary Statistics for examples-distractors condition (n = 3)
+======================================
+Mean: -1.4224566295221544e-07
+Std: 5.383759832278376e-07
+Range: 1.1855417483275232e-06
+Max: 6.172542725835228e-07
+Min: -5.682874757440004e-07
+
+
+Summary Statistics for all-targets-examples-excluded condition (n = 150)
+======================================
+Mean: 0.07468973298867544
+Std: 0.004918132186550949
+Range: 0.024116910994052887
+Max: 0.09426983445882797
+Min: 0.07015292346477509
+
+
+Summary Statistics for all-distractors-examples-excluded condition (n = 150)
+======================================
+Mean: 1.208770649322825e-07
+Std: 8.466398718930929e-07
+Range: 2.7912433324672747e-06
+Max: 1.3972644410387147e-06
+Min: -1.39397889142856e-06
+
+
+Summary Statistics for all-targets-examples-included condition (n = 153)
+======================================
+Mean: 0.0746506781749476
+Std: 0.00488168089206519
+Range: 0.024116910994052887
+Max: 0.09426983445882797
+Min: 0.07015292346477509
+
+
+Summary Statistics for all-distractors-examples-included condition (n = 153)
+======================================
+Mean: 1.1571779575807665e-07
+Std: 8.424716016884258e-07
+Range: 2.7912433324672747e-06
+Max: 1.3972644410387147e-06
+Min: -1.39397889142856e-06
+
