@@ -38,15 +38,28 @@
 \section{The experiment}
 %==============================================================================
 
-26 college students completed two blocks of $\sim$150 trials each. On every
+26 college students completed two blocks of 149 trials each. On every
 trial they heard a short noisy audio clip and reported whether it was the
 ``target'' or the ``distractor''. The underlying target and distractor
 clips are essentially noise; chance performance is $0.50$.
 
-The two block types are \texttt{full\_sentence} (the target is replayed at
-the start of each trial) and \texttt{imagined\_sentence} (subjects must hold
-the target in memory). Subjects were recruited at Oberlin ($n=16$) and
-UChicago ($n=10$). Every comparison is reported three ways: each site
+The task revolves around listening for a target word (``wall'') in the context of a target sentence (``The picture hung on the wall'').
+We cut out the final word (``wall'') and the stimuli are white noise audio clips with the
+same length ($370 \text{ms}$), sampling rate ($8000 \text{Hz}$), and channel count ($1 \text{- Mono}$) as the extracted ``wall'' clip. 
+
+There are target stimuli and distractor stimuli.
+Target stimuli are more correlated (according to Pearson R) with the ``wall'' clip than the distractor stimuli are.
+The question is whether, and under what circumstances, subjects can pick up on the correlation between
+the target stimuli and the missing word, and correctly categorize white noise stimuli into target vs.\ distractor.
+
+There were two block types. These are labelled \texttt{full\_sentence} and \texttt{imagined\_sentence}. 
+In the \texttt{full\_sentence} block subjects hear the beginning of the target
+sentence (``The picture hung on the'') followed by one of the white noise stimuli on each trial.
+In the \texttt{imagined\_sentence} blocks subjects must imagine the beginning of
+the sentence (e.g.\ ``The picture hung on the wall'') and then click a button to hear the white noise stimulus.
+
+
+Subjects were recruited at Oberlin ($n = 16$) and UChicago ($n = 10$). Every comparison is reported three ways: each site
 alone and pooled (``Unified'').
 
 %==============================================================================
@@ -57,8 +70,8 @@ Skip if you already know what a $p$-value, Cohen's $d$, and cosine
 similarity are.
 
 \subsection{Accuracy and chance}
-Each subject's score is fraction correct, between 0 and 1. If the noise is
-truly undiscriminable, scores cluster around $0.50$.
+Considering each subject's performance as a proportion of stimuli called correctly between 0 and 1 calculated via $\frac{\textbf{Correct Responses}}{\textbf{Total Stimuli Presented}}$. 
+If subjects were guessing or at chance, then we would expect scores to cluster around $0.50$.
 
 The intuition: imagine flipping a fair coin 150 times and calling each
 flip. You will get close to 75 right but almost never exactly 75. By
@@ -68,13 +81,37 @@ under the null. The question for each group is whether the cloud of
 subject means sits noticeably to the right of $0.50$ \emph{more often
 than that random spread would explain}.
 
-With 150 trials per subject, the standard deviation of an individual
-subject's accuracy under the null is roughly $\sqrt{0.25/150} \approx
-0.041$. So a single subject scoring $0.54$ is unremarkable; a group of
-16 subjects \emph{averaging} $0.526$ is much harder for chance to
-produce, because the group mean's standard error shrinks by
-$\sqrt{16}$.
+Each subject completed $N = 149$ trials, with either 75 targets and 74 distractors or vice versa. 
+Under a guessing model with no systematic knowledge (i.e., $d' = 0$), but allowing an arbitrary response bias $b = P(\text{``target''})$, 
+the expected accuracy is
 
+\[
+E[\text{accuracy}] = \frac{K b + (N-K)(1-b)}{N},
+\]
+
+where $K$ is the number of targets. For $K = 75$ this simplifies to $(74 + b)/149$, and for $K = 74$ to $(75 - b)/149$. 
+Because the class imbalance is only one trial, the expected accuracy remains extremely close to $0.5$ for any $b$ 
+(maximum deviation $\approx 0.003$).
+
+The variance of accuracy under this null is driven by trial-to-trial guessing variability. Since each trial is correct with probability 
+approximately $0.5$, the standard deviation of a single subject's accuracy is
+
+\[
+\sqrt{\frac{0.5(1-0.5)}{149}} \approx 0.041.
+\]
+
+Thus, a single subject scoring $0.54$ falls well within the range expected by chance. However, for a group of $n = 16$ subjects, 
+the standard error of the mean decreases by a factor of $\sqrt{n}$:
+
+\[
+\text{SE} = \frac{0.041}{\sqrt{16}} \approx 0.010.
+\]
+
+Consequently, a group mean of $0.526$ is substantially less likely to arise under the null than an individual deviation of similar magnitude.
+
+We are interested to make a judgement about whether or not the subject responses are better explained by this null "guessing hypothesis" or by some other hypothesis, namely that subjects are able to do this task above chance.
+
+Put graphically, does the cloud of points below fall above the mean in a reliable way that would be unlikely if subjects were just guessing? The red dashed line at $0.50$ is the null value; the blue points are individual subjects;
 \begin{center}
 \begin{tikzpicture}[scale=0.95]
   \draw[thick,->] (0,0) -- (10,0) node[right]{accuracy};
@@ -93,25 +130,31 @@ $\sqrt{16}$.
 \subsection{The $p$-value}
 Probability of a result at least as extreme as the observed one, under
 the null hypothesis. Smaller $p$ = more surprising under the null. The
-conventional cutoff is $p < 0.05$.
+conventional cutoff is $p < 0.05$. 
 
-The intuition: pretend the null is true (subjects are guessing). Now
-imagine re-running the whole experiment a thousand times in that
-imaginary world. The $p$-value is the fraction of those imaginary
-replications that would produce a group mean at least as far from
-chance as what we actually observed. $p = 0.05$ means \emph{1 in 20
-imaginary null-world experiments would look this extreme by accident}.
-$p = 0.001$ means $1$ in $1000$.
+The typical intuition and story you can tell yourself: Pretend the null is true (subjects are guessing). Now
+imagine re-running the whole experiment a million times in that
+imaginary world where the null is true. A two-tailed $p$-value is the proportion of those imaginary
+experiments where the group mean is more than x percent away from the expected mean (either more the x percent below the mean or x percent above the mean).
+A one-tailed $p$-value is the same, except you are asking \textbf{either} roportion of those imaginary
+experiments where the group mean is x percent \textbf{greater} than the expected mean \textbf{or} the proportion where the group mean is x percent \textbf{less} than the expected mean, depending on the direction of your alternative hypothesis.
+
+A $p$-value of $p = 0.05$ means \emph{1 in 20 imaginary null-world experiments would look this extreme by accident}.
+A $p$-value of $p = 0.001$ means \emph{1 in 1000 imaginary null-world experiments would look this extreme by accident}.
+
+The one-tailed $p$-value is always half the two-tailed $p$-value, because it only counts one of those tails. It is tempting to use one-tailed tests because it automatically cuts your $p$-value in half, but you should only do it if you have a strong theoretical reason to expect the effect to go in one direction and not the other. 
+In this experiment, we took an exploratory data analysis approach and we did not have a sttrong enough hypothesis to justify a one-tailed test. As a result, all of the analyses we ran were two-tailed. This is the safest way to make sure that we took all precautions to avoid false positives, and it is the most conservative approach. 
 
 A $p$-value is \emph{not} the probability that the null is true, and
 it is \emph{not} the probability that the effect is real. It is a
 statement about how often pure noise would mimic the observation.
 
 When we run many tests (e.g.\ 6 cells in Section~A, 48 correlations in
-Section~F) some will land below $0.05$ by accident. Bonferroni
-correction divides $\alpha = 0.05$ by the number of tests; so 6 tests
-$\Rightarrow$ require $p < 0.0083$, 48 tests $\Rightarrow$ require
-$p < 0.001$.
+Section~F) some will land below $0.05$ by accident. The more tests you run, the more likely you are to see a false-postive.
+If you run enough tetsts, then you will expect to see one or more false-positive. 
+If you roll a 20 sided die then you don't typically expect to roll a 4. But if you roll the die 1000 times then you expect to see \textit{some} 4s.
+We correct for this using a conservative $p$-value correction known as Bonferroni correction. The Bonferroni 
+correction divides our significance level $\alpha = 0.05$ by the number of tests; so if we run 6 tests then we take $\alpha = \frac{0.05}{6} = 0.0083$ as our new threshold for significance; if we run 48 tests then we take $\alpha = \frac{0.05}{48} \approx 0.001$ as our new threshold for significance. 
 
 \subsection{Cohen's $d$}
 Effect size in units of pooled standard deviation. Rough rule of thumb:
@@ -141,6 +184,8 @@ notice how much the two distributions still overlap even at $d = 0.8$.
   \bell{0}{0}{blue}
   \bell{0.5}{0}{red}
   \node[blue] at (-1.5, 1.6) {null};
+  \draw[blue, thick, dashed] (0,0) -- (0, 2)
+  \draw[red, thick, dashed] (0.5,0) -- (0.5, 2)
   \node[red] at (2, 1.6) {observed};
   \draw[<->, thick] (0, -0.3) -- (0.5, -0.3);
   \node at (0.25, -0.6) {\small $d=0.2$};
@@ -148,6 +193,8 @@ notice how much the two distributions still overlap even at $d = 0.8$.
   \begin{scope}[xshift=7cm]
     \bell{0}{0}{blue}
     \bell{1}{0}{red}
+    \draw[blue, thick, dashed] (0,0) -- (0, 2)
+    \draw[red, thick, dashed] (1,0) -- (1, 2)
     \draw[<->, thick] (0, -0.3) -- (1, -0.3);
     \node at (0.5, -0.6) {\small $d=0.5$};
   \end{scope}
@@ -155,13 +202,93 @@ notice how much the two distributions still overlap even at $d = 0.8$.
   \begin{scope}[xshift=14cm]
     \bell{0}{0}{blue}
     \bell{1.6}{0}{red}
+    \draw[blue, thick, dashed] (0,0) -- (0, 2)
+    \draw[red, thick, dashed] (1.6,0) -- (1.6, 2)
     \draw[<->, thick] (0, -0.3) -- (1.6, -0.3);
     \node at (0.8, -0.6) {\small $d=0.8$};
   \end{scope}
 \end{tikzpicture}
 \end{center}
 
-\subsection{Cosine similarity}
+\subsection{Classification Images & Cosine Similarity}
+Our audio files are in PCM format, which stands for Pulse Code Modulation. This is a common way to digitally represent audio signals.
+They are 8 kHz, 16bit, mono, meaning that they have a sampling rate of 8000 samples per second, each sample is represented by 16 bits (2 bytes), and there is only one audio channel (mono).
+An audio file in PCM format is simply a sequence of numbers stored in memory:
+\[
+[x_1, x_2, x_3, \dots, x_N].
+\]
+Each number is the \emph{amplitude} of the sound at a specific moment in time. 
+For an 8 kHz file, the computer reads 8000 of these numbers per second and sends them to the speaker. 
+If we plot these values against time and connect them, we obtain the waveform we hear.
+
+\vspace{0.5em}
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+
+% --- LEFT LABELS ---
+\node[anchor=east] at (-1, 1.8) {\textbf{Vector}};
+\node[anchor=east] at (-1,-0.5) {\textbf{Waveform}};
+
+% --- TOP: VECTOR ---
+\node[anchor=west] at (0,2.5) {\small Stored in memory (sequence of amplitudes)};
+
+\foreach \i/\val in {0/0,1/8800,2/1600,3/-8000,4/10400,5/4000,6/-9600,7/6400,8/1600} {
+  \draw (\i-0.4,1.5) rectangle +(0.8,0.6);
+  \node at (\i,1.8) {\scriptsize \val};
+}
+
+% arrows down
+\foreach \i in {1,...,8} {
+  \draw[->,gray] (\i,1.5) -- (\i,-0.1);
+}
+
+% --- BOTTOM: WAVEFORM ---
+% axes
+\draw[->] (0,-1.5) -- (8.5,-1.5) node[right] {time};
+\draw[->] (0,-1.5) -- (0,1.0) node[above];
+
+% smooth waveform
+\draw[thick, gray] plot[smooth] coordinates {
+  (0,-1.5) (1,-0.5) (2,-1.2) (3,-2.0)
+  (4,-0.4) (5,-1.0) (6,-2.1) (7,-0.6) (8,-1.2)
+};
+
+% sample points
+\foreach \x/\y in {
+  0/-1.5,
+  1/-0.5,
+  2/-1.2,
+  3/-2.0,
+  4/-0.4,
+  5/-1.0,
+  6/-2.1,
+  7/-0.6,
+  8/-1.2
+}{
+  \draw[dashed] (\x,-1.5) -- (\x,\y);
+  \fill (\x,\y) circle (2pt);
+}
+
+% spacing label
+\draw[<->] (0,-1.7) -- (1,-1.7);
+\node at (0.5,-2) {\small $1/8000$ sec};
+
+\end{tikzpicture}
+\end{center}
+\vspace{0.5em}
+
+\noindent
+\textbf{Intuition:} The computer stores sound as a list of numbers. Each number says 
+“how far the speaker should move” at that instant. Playing audio just means reading 
+these numbers very quickly (8000 per second here) and turning them into motion. 
+Plotting those numbers over time reveals the familiar waveform.
+
+\textbf{Classification Images:} Over the entirety of the experiment, the subject has responded "yes, this is a target" and "no, this is not a target" over many sounds. 
+We are curious about what makes a subject either think that something is a target, or similarly, what makes someone think that something is a distractor.
+We are interested in getting some \textit{distilled} representation of what \textbf{is} a target in the subject's head, or prehaps just the decision boundary they used for discerning between targets and distractors.
+To do this we start by taking all of the stimuli that the subject called "target" and we average their waveforms together. This gives us an average target waveform. We do the same for all of the stimuli that the subject called "distractor", giving us an average distractor waveform. Finally, we take the difference between those two averages, giving us a \textit{classification image} (CI) for 
+SO j
+A classification image is also a long list of numbers, i.e.\ a vector. The cosine similarity between two vectors is the cosine of the angle between them in high-dimensional space. It ranges from $+1$ (identical direction) to $0$ (orthogonal) to $-1$ (opposite direction). We use it to compare a subject's classification image to the true target waveform.
 A waveform or per-subject classification image is a long list of
 numbers, i.e.\ a vector. The cosine of the angle between two vectors is
 $+1$ if identical direction, $0$ if orthogonal, $-1$ if opposite. We
